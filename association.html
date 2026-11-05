@@ -69,7 +69,7 @@
                         <label>الولاية <span class="required">*</span></label>
                         <select id="assocState" required>
                             <option value="">اختر الولاية...</option>
-                            <option value="المدية">المدية (Pilot Project)</option>
+                            <option value="المدية">المدية</option>
                             <option value="الجزائر">الجزائر العاصمة</option>
                             <option value="وهران">وهران</option>
                         </select>
@@ -102,7 +102,6 @@
                         <option value="volunteers">نحتاج متطوعين</option>
                     </select>
                 </div>
-
                 <div class="form-group">
                     <label>نوع الاحتياج/الفائض <span class="required">*</span></label>
                     <select id="needType">
@@ -115,21 +114,17 @@
                         <option value="volunteers">متطوعين</option>
                     </select>
                 </div>
-
                 <div class="form-group">
                     <label>الكمية/العدد</label>
                     <input type="text" id="quantity" placeholder="مثال: 50 مستفيد أو 10 متطوعين">
                 </div>
-
                 <div class="form-group">
                     <label>تفاصيل إضافية</label>
                     <textarea id="publishDetails" rows="4" placeholder="اشرح احتياجك أو مواردك بتفصيل أكثر..."></textarea>
                 </div>
             </div>
 
-            <button type="submit" class="submit-btn" id="submitBtn">
-                <i class="fa-solid fa-paper-plane"></i> نشر في الشبكة
-            </button>
+            <button type="submit" class="submit-btn" id="submitBtn"><i class="fa-solid fa-paper-plane"></i> نشر في الشبكة</button>
         </form>
     </div>
 </section>
@@ -142,19 +137,21 @@
     </div>
 </footer>
 
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-<script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
+
     const firebaseConfig = {
-        apiKey: "AIzaSyDWcHnd1gm2L8Fbq-GaoyVJJk3tySbzSvk",
-        authDomain: "wasl-fba4b.firebaseapp.com",
-        projectId: "wasl-fba4b",
-        storageBucket: "wasl-fba4b.firebasestorage.app",
-        messagingSenderId: "604065858483",
-        appId: "1:604065858483:web:398fae3b5c8f28a06a01c6"
+        apiKey: "AIzaSyDurN1L31Bli_6uiyXD87Bx3-KSOqxqbfo",
+        authDomain: "wasl-demo.firebaseapp.com",
+        projectId: "wasl-demo",
+        storageBucket: "wasl-demo.firebasestorage.app",
+        messagingSenderId: "89706343519",
+        appId: "1:89706343519:web:af8fe7288e2b95a2ebffea"
     };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
     document.getElementById('current-year').textContent = new Date().getFullYear();
 
@@ -169,11 +166,9 @@
         setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateX(-100%)'; toast.style.transition = 'all 0.3s'; setTimeout(() => toast.remove(), 300); }, 4000);
     }
 
-    function generateTrackingCode() {
-        return `WSL-${Math.floor(1000 + Math.random() * 9000)}`;
-    }
+    function generateTrackingCode() { return `WSL-${Math.floor(1000 + Math.random() * 9000)}`; }
 
-    document.getElementById('assocForm').addEventListener('submit', function(e) {
+    document.getElementById('assocForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
         btn.disabled = true;
@@ -196,52 +191,47 @@
             details: document.getElementById('publishDetails').value,
             trackingCode: trackingCode,
             status: 'pending_review',
-            timestamp: firebase.database.ServerValue.TIMESTAMP
+            createdAt: serverTimestamp()
         };
 
-        db.ref('requests/associations').push(data)
-            .then(() => {
-                showToast('✅ تم نشر طلبك بنجاح!', 'success');
-                const codeDisplay = `
-                    <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px;">
-                        <div style="background: white; border-radius: 20px; padding: 2.5rem; max-width: 450px; width: 100%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
-                            <i class="fa-solid fa-circle-check" style="font-size: 4rem; color: #22c55e; margin-bottom: 1rem;"></i>
-                            <h2 style="color: var(--primary); margin-bottom: 1rem;">تم نشر طلب الجمعية!</h2>
-                            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">احفظ كود التتبع لمتابعة حالة الطلب</p>
-                            <div style="background: #f0fdfa; border: 2px dashed var(--primary); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
-                                <div style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">كود التتبع</div>
-                                <div style="font-size: 2.5rem; font-weight: 900; color: var(--primary); letter-spacing: 3px;">${trackingCode}</div>
-                            </div>
-                            <div style="display: flex; gap: 10px;">
-                                <a href="track.html" style="flex: 1; padding: 12px; background: var(--primary); color: white; border-radius: 10px; text-decoration: none; font-weight: 700;">تتبع الطلب</a>
-                                <button onclick="this.parentElement.parentElement.parentElement.remove()" style="flex: 1; padding: 12px; background: var(--bg-alt); color: var(--text); border: 1px solid var(--border); border-radius: 10px; font-weight: 700; cursor: pointer; font-family: 'Cairo';">إغلاق</button>
-                            </div>
+        try {
+            await addDoc(collection(db, "requests", "associations", "items"), data);
+            showToast('✅ تم نشر طلب الجمعية بنجاح!', 'success');
+            
+            const codeDisplay = `
+                <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px;">
+                    <div style="background: white; border-radius: 20px; padding: 2.5rem; max-width: 450px; width: 100%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+                        <i class="fa-solid fa-circle-check" style="font-size: 4rem; color: #22c55e; margin-bottom: 1rem;"></i>
+                        <h2 style="color: var(--primary); margin-bottom: 1rem;">تم نشر طلب الجمعية!</h2>
+                        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">احفظ كود التتبع لمتابعة حالة الطلب</p>
+                        <div style="background: #f0fdfa; border: 2px dashed var(--primary); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                            <div style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">كود التتبع</div>
+                            <div style="font-size: 2.5rem; font-weight: 900; color: var(--primary); letter-spacing: 3px;">${trackingCode}</div>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <a href="track.html" style="flex: 1; padding: 12px; background: var(--primary); color: white; border-radius: 10px; text-decoration: none; font-weight: 700;">تتبع الطلب</a>
+                            <button onclick="this.parentElement.parentElement.parentElement.remove()" style="flex: 1; padding: 12px; background: var(--bg-alt); color: var(--text); border: 1px solid var(--border); border-radius: 10px; font-weight: 700; cursor: pointer; font-family: 'Cairo';">إغلاق</button>
                         </div>
                     </div>
-                `;
-                document.body.insertAdjacentHTML('beforeend', codeDisplay);
-                this.reset();
-            })
-            .catch((error) => {
-                showToast('حدث خطأ: ' + error.message, 'error');
-            })
-            .finally(() => {
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> نشر في الشبكة';
-            });
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', codeDisplay);
+            this.reset();
+        } catch (error) {
+            console.error("Error:", error);
+            showToast('حدث خطأ: ' + error.message, 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> نشر في الشبكة';
+        }
     });
 
     const menuToggle = document.querySelector('.menu-toggle');
     const mainNav = document.querySelector('.main-nav');
     if (menuToggle && mainNav) {
-        menuToggle.addEventListener('click', () => {
-            mainNav.style.display = mainNav.style.display === 'flex' ? 'none' : 'flex';
-        });
+        menuToggle.addEventListener('click', () => { mainNav.style.display = mainNav.style.display === 'flex' ? 'none' : 'flex'; });
     }
 </script>
-
-<style>
-    @keyframes slideIn { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-</style>
+<style>@keyframes slideIn { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }</style>
 </body>
 </html>
