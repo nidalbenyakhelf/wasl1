@@ -36,6 +36,7 @@
         <a href="index.html" class="logo"><img src="assets/logo.png" alt="وصْل"><span>وصْل</span></a>
         <nav class="main-nav">
             <a href="index.html">الرئيسية</a>
+            <a href="track.html"><i class="fa-solid fa-magnifying-glass-location"></i> تتبع طلبك</a>
             <a href="association.html">الجمعيات</a>
             <a href="volunteer.html">المتطوعين</a>
             <a href="donor.html">المتبرعين</a>
@@ -47,7 +48,7 @@
 <section class="page-header">
     <div class="container">
         <h1><i class="fa-solid fa-hand-holding-heart"></i> طلب مساعدة</h1>
-        <p>املأ النموذج أدناه وسيقوم فريق الإدارة بتقييم طلبك بموضوعية خلال 24-48 ساعة</p>
+        <p>املأ النموذج أدناه وسيقوم فريق الإدارة بتقييم طلبك خلال 24-48 ساعة</p>
     </div>
 </section>
 
@@ -56,7 +57,7 @@
         <div class="info-box">
             <i class="fa-solid fa-shield-halved"></i>
             <div>
-                <p><strong>خصوصيتك مضمونة:</strong> جميع البيانات سرية. لا يمكنك اختيار درجة الاستعجال بنفسك لضمان العدالة؛ ففريق الإدارة يستخدم نظام تقييم نمطي (Scoring Matrix) موضوعي لتصنيف الطلبات.</p>
+                <p><strong>خصوصيتك مضمونة:</strong> جميع البيانات سرية. بعد التسجيل ستحصل على <strong>كود تتبع</strong> يمكنك استخدامه لمعرفة حالة طلبك في أي وقت.</p>
             </div>
         </div>
 
@@ -144,7 +145,7 @@
                         <select id="evictionThreat"><option value="no">لا</option><option value="yes">نعم</option></select>
                     </div>
                     <div class="form-group">
-                        <label>هل تعرض السكن لكارثة recently؟</label>
+                        <label>هل تعرض السكن لكارثة؟</label>
                         <select id="housingDisaster"><option value="no">لا</option><option value="yes">نعم</option></select>
                     </div>
                 </div>
@@ -191,22 +192,58 @@
     </div>
 </section>
 
+<!-- Toast Notifications -->
+<div id="toastContainer" style="position: fixed; top: 90px; left: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px;"></div>
+
 <footer class="site-footer">
     <div class="container">
         <div class="footer-bottom"><p>&copy; <span id="current-year"></span> منصة وصْل - جميع الحقوق محفوظة.</p></div>
     </div>
 </footer>
 
-<script type="module">
-    import { db, ref, push, serverTimestamp } from './firebase.js';
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDWcHnd1gm2L8Fbq-GaoyVJJk3tySbzSvk",
+        authDomain: "wasl-fba4b.firebaseapp.com",
+        projectId: "wasl-fba4b",
+        storageBucket: "wasl-fba4b.firebasestorage.app",
+        messagingSenderId: "604065858483",
+        appId: "1:604065858483:web:398fae3b5c8f28a06a01c6"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
     document.getElementById('current-year').textContent = new Date().getFullYear();
-    
-    document.getElementById('needyForm').addEventListener('submit', async function(e) {
+
+    // ===== نظام Toast Notifications =====
+    function showToast(message, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        const icons = { success: 'fa-circle-check', error: 'fa-circle-xmark', info: 'fa-circle-info', warning: 'fa-triangle-exclamation' };
+        const colors = { success: '#22c55e', error: '#ef4444', info: '#3b82f6', warning: '#eab308' };
+        toast.style.cssText = `background: white; border-right: 4px solid ${colors[type]}; padding: 1rem 1.5rem; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 10px; min-width: 280px; animation: slideIn 0.3s ease; font-family: 'Cairo', sans-serif;`;
+        toast.innerHTML = `<i class="fa-solid ${icons[type]}" style="color: ${colors[type]}; font-size: 1.2rem;"></i><span style="flex: 1; font-weight: 600; color: #1f2937;">${message}</span>`;
+        container.appendChild(toast);
+        setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateX(-100%)'; toast.style.transition = 'all 0.3s'; setTimeout(() => toast.remove(), 300); }, 4000);
+    }
+
+    // ===== توليد كود تتبع فريد =====
+    function generateTrackingCode() {
+        const num = Math.floor(1000 + Math.random() * 9000);
+        return `WSL-${num}`;
+    }
+
+    // ===== إرسال النموذج =====
+    document.getElementById('needyForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
         btn.disabled = true;
         btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري الإرسال...';
+
+        const trackingCode = generateTrackingCode();
+        showToast('جاري تسجيل طلبك...', 'info');
 
         const data = {
             type: 'needy',
@@ -227,21 +264,46 @@
             receivesAid: document.getElementById('receivesAid').value === 'yes',
             helpType: document.getElementById('helpType').value,
             helpDetails: document.getElementById('helpDetails').value,
+            trackingCode: trackingCode,
             status: 'pending_review',
-            timestamp: serverTimestamp() // وقت الخادم الدقيق
+            timestamp: firebase.database.ServerValue.TIMESTAMP
         };
 
-        try {
-            await push(ref(db, 'requests/needy'), data);
-            alert('✅ تم إرسال طلبك بنجاح!\n\nسيقوم فريق الإدارة بتقييم طلبك خلال 24-48 ساعة.');
-            this.reset();
-        } catch (error) {
-            console.error("Error adding document: ", error);
-            alert('حدث خطأ أثناء الإرسال، يرجى المحاولة لاحقاً.');
-        } finally {
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> إرسال الطلب للتقييم';
-        }
+        db.ref('requests/needy').push(data)
+            .then(() => {
+                showToast('✅ تم إرسال طلبك بنجاح!', 'success');
+                
+                // عرض كود التتبع
+                const codeDisplay = `
+                    <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px;">
+                        <div style="background: white; border-radius: 20px; padding: 2.5rem; max-width: 450px; width: 100%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+                            <i class="fa-solid fa-circle-check" style="font-size: 4rem; color: #22c55e; margin-bottom: 1rem;"></i>
+                            <h2 style="color: var(--primary); margin-bottom: 1rem;">تم تسجيل طلبك!</h2>
+                            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">احفظ كود التتبع الخاص بك لمتابعة حالة الطلب</p>
+                            <div style="background: #f0fdfa; border: 2px dashed var(--primary); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                                <div style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">كود التتبع الخاص بك</div>
+                                <div style="font-size: 2.5rem; font-weight: 900; color: var(--primary); letter-spacing: 3px;">${trackingCode}</div>
+                            </div>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">سيتم تقييم طلبك خلال 24-48 ساعة</p>
+                            <div style="display: flex; gap: 10px;">
+                                <a href="track.html" style="flex: 1; padding: 12px; background: var(--primary); color: white; border-radius: 10px; text-decoration: none; font-weight: 700;">تتبع الطلب</a>
+                                <button onclick="this.parentElement.parentElement.parentElement.remove()" style="flex: 1; padding: 12px; background: var(--bg-alt); color: var(--text); border: 1px solid var(--border); border-radius: 10px; font-weight: 700; cursor: pointer; font-family: 'Cairo';">إغلاق</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.body.insertAdjacentHTML('beforeend', codeDisplay);
+                
+                this.reset();
+            })
+            .catch((error) => {
+                console.error(error);
+                showToast('حدث خطأ: ' + error.message, 'error');
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> إرسال الطلب للتقييم';
+            });
     });
 
     const menuToggle = document.querySelector('.menu-toggle');
@@ -252,5 +314,9 @@
         });
     }
 </script>
+
+<style>
+    @keyframes slideIn { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+</style>
 </body>
 </html>
