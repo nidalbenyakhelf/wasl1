@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0F5B4E">
+    <title>وصْل | جسر العطاء الذكي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+    <div class="container header-inner">
+        <a href="index.html" class="logo">
+            <img src="assets/logo.png" alt="وصْل">
+            <span>وصْل</span>
+        </a>
+        <nav class="main-nav">
+            <a href="#about">من نحن</a>
+            <a href="#how-it-works">كيف نعمل</a>
+            <a href="#faq">الأسئلة الشائعة</a>
+            <a href="admin.html" class="btn btn-primary">لوحة التحكم</a>
+        </nav>
+        <button class="menu-toggle" aria-label="القائمة">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+    </div>
+    <div class="mobile-menu">
+        <a href="#about">من نحن</a>
+        <a href="#how-it-works">كيف نعمل</a>
+        <a href="#faq">الأسئلة الشائعة</a>
+        <a href="admin.html">لوحة التحكم</a>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="container hero-content">
+        <div class="hero-text">
+            <span class="hero-badge">
+                <i class="fa-solid fa-seedling"></i>
+                منصة تضامنية جزائرية
+            </span>
+            <h1>نَصِلُ بالخير<br><span>لمن يستحقه</span></h1>
+            <p>فضاء رقمي واحد يربط الجمعيات، المحتاجين، المتطوعين، والمتبرعين. المرحلة التجريبية (Pilot Project) تنطلق من ولاية المدية.</p>
+            
+            <div class="hero-actions">
+                <a href="association.html" class="btn btn-primary btn-lg">
+                    <i class="fa-solid fa-building-ngo"></i>
+                    سجّل جمعيتك
+                </a>
+                <a href="needy.html" class="btn btn-outline btn-lg">
+                    <i class="fa-solid fa-hand-holding-heart"></i>
+                    أطلب مساعدة
+                </a>
+                <a href="volunteer.html" class="btn btn-outline btn-lg">
+                    <i class="fa-solid fa-users"></i>
+                    تطوّع معنا
+                </a>
+                <a href="donor.html" class="btn btn-outline btn-lg">
+                    <i class="fa-solid fa-coins"></i>
+                    تبرّع الآن
+                </a>
+            </div>
+            
+            <div class="hero-stats">
+                <div class="stat">
+                    <strong id="count1">0</strong>
+                    <span>مستفيد</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <strong id="count2">0</strong>
+                    <span>متطوع</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <strong id="count3">0</strong>
+                    <span>جمعية</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="hero-visual">
+            <div class="hero-card">
+                <div class="hero-card-icon">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <h3>مطابقة ذكية</h3>
+                <p>نربط المتطوع المناسب بالاحتياج المناسب في ثوانٍ</p>
+            </div>
+            <div class="hero-card featured">
+                <div class="hero-card-icon">
+                    <i class="fa-solid fa-location-dot"></i>
+                </div>
+                <h3>نشطون في المدية</h3>
+                <p>المرحلة التجريبية (Pilot Project) تنطلق من هنا</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="about" class="section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">تعرف علينا</span>
+            <h2>من نحن</h2>
+            <p>منصة شاملة تربط جميع أطراف العمل الخيري في الجزائر</p>
+        </div>
+        <div class="about-content">
+            <p>"منصة وصْل" هي شبكة ذكية تربط بين <strong>الجمعيات الخيرية</strong>، <strong>المحتاجين</strong>، <strong>المتطوعين</strong>، و<strong>المتبرعين</strong> في منظومة واحدة متكاملة.</p>
+            <p>نوفّر للجمعيات أداة تنسيق ذكية لتبادل الموارد الفائضة وتغطية احتياجات بعضها البعض، مما يحسّن توزيع التبرعات ويقلل الهدر إلى الصفر. في الوقت نفسه، نسهّل على المحتاجين طلب المساعدة، ونفتح للمتطوعين والمتبرعين أبواب المشاركة الفعّالة عبر "جواز التطوع" الرقمي.</p>
+        </div>
+    </div>
+</section>
+
+<section id="how-it-works" class="section section-alt">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">رحلتنا معك</span>
+            <h2>كيف تعمل المنصة؟</h2>
+            <p>أربع خطوات مدعومة بالتقنية من الطلب إلى الأثر</p>
+        </div>
+        <div class="steps-grid">
+            <div class="step-card" onclick="openModal('modal-1')">
+                <span class="step-number">01</span>
+                <div class="step-icon"><i class="fa-solid fa-file-signature"></i></div>
+                <h3>تسجيل الطلب</h3>
+                <p>المحتاج يسجّل طلبه، والجمعية تعلن عن فائض موارد أو حاجة لدعم.</p>
+                <span class="click-hint">اضغط للتفاصيل <i class="fa-solid fa-arrow-left"></i></span>
+            </div>
+            <div class="step-card" onclick="openModal('modal-2')">
+                <span class="step-number">02</span>
+                <div class="step-icon"><i class="fa-solid fa-location-crosshairs"></i></div>
+                <h3>مطابقة ذكية</h3>
+                <p>النظام يحدد الموقع الجغرافي (Geo-Targeting) ودرجة الاستعجال لربط الطلب بالجهة الأنسب.</p>
+                <span class="click-hint">اضغط للتفاصيل <i class="fa-solid fa-arrow-left"></i></span>
+            </div>
+            <div class="step-card" onclick="openModal('modal-3')">
+                <span class="step-number">03</span>
+                <div class="step-icon"><i class="fa-solid fa-id-card"></i></div>
+                <h3>جواز التطوع</h3>
+                <p>المتطوع يبادر بالمساعدة (Passport Volontariat)، ويتم توثيق مساهمته في سجله الرقمي.</p>
+                <span class="click-hint">اضغط للتفاصيل <i class="fa-solid fa-arrow-left"></i></span>
+            </div>
+            <div class="step-card" onclick="openModal('modal-4')">
+                <span class="step-number">04</span>
+                <div class="step-icon"><i class="fa-solid fa-chart-line"></i></div>
+                <h3>تتبع الأثر</h3>
+                <p>متابعة لحظية وشفافة (Real-time Tracking) لرحلة التبرع من البداية حتى وصوله لمستحقه.</p>
+                <span class="click-hint">اضغط للتفاصيل <i class="fa-solid fa-arrow-left"></i></span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="faq" class="section">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-label">صوتك مسموع</span>
+            <h2>الأسئلة الشائعة</h2>
+            <p>كل ما تريد معرفته عن المنصة</p>
+        </div>
+        <div class="faq-container">
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span><i class="fa-solid fa-hand-holding-heart"></i> كيف يمكنني طلب مساعدة؟</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>اضغط على "أطلب مساعدة" واملأ النموذج بمعلوماتك. فريق الإدارة سيقيّم طلبك بموضوعية خلال 24-48 ساعة ويوجّهه لأقرب جمعية.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span><i class="fa-solid fa-shield-halved"></i> هل بياناتي سرية وآمنة؟</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>نعم تماماً. نستخدم أعلى معايير التشفير. بياناتك لا تظهر إلا للجمعيات المعتمدة في منطقتك بعد اعتماد الإدارة.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span><i class="fa-solid fa-users"></i> كيف يمكنني التطوع أو التبرع؟</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>سجّل في قسم "تطوّع معنا" أو "تبرّع الآن"، حدد مهاراتك أو نوع التبرع. ستصلك فرص مطابقة في منطقتك.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span><i class="fa-solid fa-building-ngo"></i> كيف تسجل جمعيتي؟</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>اضغط على "سجّل جمعيتك" وقدّم الوثائق المطلوبة. تتم المراجعة خلال 48 ساعة. حالياً نقبل الجمعيات في ولاية المدية كمرحلة تجريبية.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span><i class="fa-solid fa-scale-balanced"></i> كيف يتم تحديد أولوية الطلبات؟</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>نظام تقييم نمطي (Scoring Matrix) موضوعي يحسب نقاط كل حالة بناءً على معايير دقيقة (أطفال، أمراض، وضع السكن...). الإدارة فقط هي من تعتمد الأولويات.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span><i class="fa-solid fa-mobile-screen"></i> هل يوجد تطبيق للهاتف؟</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>نعم! المنصة تعمل كتطبيق PWA. يمكنك تثبيتها على هاتفك مباشرة من المتصفح، وتعمل حتى بدون إنترنت.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <img src="assets/logo.png" alt="وصْل" class="footer-logo">
+                <p>منصة وصْل هي مبادرة رقمية جزائرية تهدف لتسهيل العمل الخيري والتضامني، وربط أطراف العطاء في منظومة ذكية وشفافة.</p>
+                <div class="social-icons">
+                    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>روابط سريعة</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html"><i class="fa-solid fa-chevron-left"></i> الرئيسية</a></li>
+                    <li><a href="#about"><i class="fa-solid fa-chevron-left"></i> من نحن</a></li>
+                    <li><a href="#how-it-works"><i class="fa-solid fa-chevron-left"></i> كيف تعمل</a></li>
+                    <li><a href="#faq"><i class="fa-solid fa-chevron-left"></i> الأسئلة الشائعة</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>بوابات المنصة</h4>
+                <ul class="footer-links">
+                    <li><a href="association.html"><i class="fa-solid fa-chevron-left"></i> بوابة الجمعيات</a></li>
+                    <li><a href="needy.html"><i class="fa-solid fa-chevron-left"></i> بوابة المحتاجين</a></li>
+                    <li><a href="volunteer.html"><i class="fa-solid fa-chevron-left"></i> بوابة المتطوعين</a></li>
+                    <li><a href="donor.html"><i class="fa-solid fa-chevron-left"></i> بوابة المتبرعين</a></li>
+                    <li><a href="admin.html"><i class="fa-solid fa-chevron-left"></i> لوحة الإدارة</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>تواصل معنا</h4>
+                <ul class="footer-contact">
+                    <li><i class="fa-solid fa-location-dot"></i> المدية، الجزائر</li>
+                    <li><i class="fa-solid fa-envelope"></i> contact@wasl.dz</li>
+                    <li><i class="fa-solid fa-phone"></i> 0550 12 34 56</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span id="current-year"></span> منصة وصْل - جميع الحقوق محفوظة.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Modals -->
+<div id="modal-1" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal('modal-1')">&times;</span>
+        <div class="modal-icon"><i class="fa-solid fa-file-signature"></i></div>
+        <h2>تسجيل الطلب</h2>
+        <p>يقوم المحتاج بإنشاء حساب وتقديم طلب مساعدة بسرية تامة. في المقابل، تدخل الجمعيات مواردها الفائضة في النظام لتكون جاهزة للربط الفوري.</p>
+    </div>
+</div>
+
+<div id="modal-2" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal('modal-2')">&times;</span>
+        <div class="modal-icon"><i class="fa-solid fa-location-crosshairs"></i></div>
+        <h2>المطابقة الذكية (Geo-Targeting)</h2>
+        <ul class="modal-features">
+            <li><i class="fa-solid fa-location-dot"></i><div><strong>الموقع الجغرافي:</strong> أقرب جمعية في منطقتك</div></li>
+            <li><i class="fa-solid fa-scale-balanced"></i><div><strong>نوع الاحتياج:</strong> مطابقة دقيقة للموارد</div></li>
+            <li><i class="fa-solid fa-gauge-high"></i><div><strong>درجة الاستعجال:</strong> الأولوية للحالات الطارئة</div></li>
+        </ul>
+    </div>
+</div>
+
+<div id="modal-3" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal('modal-3')">&times;</span>
+        <div class="modal-icon"><i class="fa-solid fa-id-card"></i></div>
+        <h2>جواز التطوع (Passport Volontariat)</h2>
+        <p>سجل رقمي موثّق يسجل كل ساعات تطوعك، الجمعيات التي ساعدتها، والتقييمات. يمكنك مشاركته في سيرتك الذاتية أو للحصول على شهادات تقدير.</p>
+    </div>
+</div>
+
+<div id="modal-4" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal('modal-4')">&times;</span>
+        <div class="modal-icon"><i class="fa-solid fa-chart-line"></i></div>
+        <h2>تتبع الأثر (Real-time Tracking)</h2>
+        <ul class="modal-features">
+            <li><i class="fa-solid fa-eye"></i><div><strong>شفافية كاملة:</strong> كل تبرع موثق من البداية للنهاية</div></li>
+            <li><i class="fa-solid fa-file-pdf"></i><div><strong>تقارير دورية:</strong> إحصائيات واضحة عن أثر العمل</div></li>
+        </ul>
+    </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

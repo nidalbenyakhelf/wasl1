@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0F5B4E">
+    <title>لوحة الإدارة - وصْل</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .admin-header { padding: 120px 0 40px; background: var(--bg); border-bottom: 1px solid var(--border); }
+        .admin-header h1 { font-size: 2.5rem; color: var(--text); margin-bottom: 10px; }
+        .admin-header p { color: var(--text-muted); font-size: 1.1rem; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+        .stat-card { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; text-align: center; transition: 0.3s; }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+        .stat-card.urgent { border-color: #ef4444; }
+        .stat-card.medium { border-color: #eab308; }
+        .stat-card.low { border-color: #22c55e; }
+        .stat-card .number { font-size: 2.5rem; font-weight: 900; margin-bottom: 0.5rem; }
+        .stat-card.urgent .number { color: #ef4444; }
+        .stat-card.medium .number { color: #eab308; }
+        .stat-card.low .number { color: #22c55e; }
+        .stat-card .label { color: var(--text-muted); font-size: 0.95rem; }
+        .requests-container { max-width: 1200px; margin: 0 auto; padding: 40px 0; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 2rem; flex-wrap: wrap; }
+        .tab { padding: 10px 20px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; font-weight: 700; transition: 0.3s; font-family: 'Cairo', sans-serif; color: var(--text); }
+        .tab:hover { border-color: var(--primary); color: var(--primary); }
+        .tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .request-card { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; transition: 0.3s; }
+        .request-card:hover { box-shadow: var(--shadow-lg); }
+        .request-card.urgent { border-right: 4px solid #ef4444; }
+        .request-card.medium { border-right: 4px solid #eab308; }
+        .request-card.low { border-right: 4px solid #22c55e; }
+        .request-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+        .request-title { font-size: 1.3rem; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 10px; }
+        .priority-control { display: flex; align-items: center; gap: 10px; }
+        .priority-control label { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; }
+        .priority-select { padding: 8px 16px; border-radius: 20px; border: 2px solid var(--border); font-family: 'Cairo', sans-serif; font-weight: 700; cursor: pointer; transition: 0.3s; background: white; font-size: 0.95rem; }
+        .priority-select:focus { outline: none; border-color: var(--primary); }
+        .priority-select.urgent { border-color: #ef4444; color: #991b1b; }
+        .priority-select.medium { border-color: #eab308; color: #92400e; }
+        .priority-select.low { border-color: #22c55e; color: #166534; }
+        .auto-badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; margin-right: 10px; }
+        .auto-badge.ai { background: #dbeafe; color: #1e40af; }
+        .auto-badge.manual { background: #fef3c7; color: #92400e; }
+        .request-details { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+        .detail-item { background: var(--bg-alt); padding: 1rem; border-radius: 10px; }
+        .detail-item strong { display: block; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.25rem; }
+        .detail-item span { color: var(--text); font-weight: 600; }
+        .scoring-box { background: var(--bg-alt); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .scoring-box h4 { color: var(--primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 10px; }
+        .score-item { display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
+        .score-item:last-child { border-bottom: none; }
+        .score-item .label { color: var(--text-muted); }
+        .score-item .points { font-weight: 800; color: var(--primary); }
+        .total-score { display: flex; justify-content: space-between; padding: 1rem; background: var(--primary); color: white; border-radius: 10px; margin-top: 1rem; font-weight: 800; }
+        .action-buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .action-btn { padding: 12px 24px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.3s; font-family: 'Cairo', sans-serif; display: flex; align-items: center; gap: 8px; }
+        .action-btn.approve { background: var(--primary); color: white; }
+        .action-btn.approve:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        .action-btn.reject { background: #ef4444; color: white; }
+        .action-btn.reject:hover { background: #dc2626; transform: translateY(-2px); }
+        .action-btn.pending { background: var(--bg-alt); color: var(--text-muted); border: 1px solid var(--border); }
+        .action-btn.pending:hover { border-color: var(--primary); color: var(--primary); }
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); background: var(--bg); border: 1px solid var(--border); border-radius: 16px; }
+        .empty-state i { font-size: 4rem; margin-bottom: 1rem; opacity: 0.3; }
+        .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; }
+        .status-badge.pending { background: #fef3c7; color: #92400e; }
+        .status-badge.approved { background: #dcfce7; color: #166534; }
+        .status-badge.rejected { background: #fee2e2; color: #991b1b; }
+        @media (max-width: 768px) {
+            .request-header { flex-direction: column; align-items: flex-start; }
+            .priority-control { width: 100%; }
+            .priority-select { flex: 1; }
+            .action-buttons { flex-direction: column; }
+            .action-btn { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container header-inner">
+        <a href="index.html" class="logo"><img src="assets/logo.png" alt="وصْل"><span>وصْل</span></a>
+        <nav class="main-nav">
+            <a href="index.html">الرئيسية</a>
+            <a href="needy.html">طلب مساعدة</a>
+            <a href="association.html">الجمعيات</a>
+            <a href="volunteer.html">المتطوعين</a>
+            <a href="donor.html">المتبرعين</a>
+        </nav>
+        <button class="menu-toggle" aria-label="القائمة"><i class="fa-solid fa-bars"></i></button>
+    </div>
+</header>
+
+<section class="admin-header">
+    <div class="container">
+        <h1><i class="fa-solid fa-shield-halved"></i> لوحة الإدارة</h1>
+        <p>نظام إدارة الأولويات والمطابقة الذكية - Scoring Matrix + Geo-Targeting + اعتماد مزدوج</p>
+    </div>
+</section>
+
+<section class="requests-container">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-card urgent"><div class="number" id="urgentCount">0</div><div class="label">حالات مستعجلة</div></div>
+            <div class="stat-card medium"><div class="number" id="mediumCount">0</div><div class="label">حالات متوسطة</div></div>
+            <div class="stat-card low"><div class="number" id="lowCount">0</div><div class="label">حالات روتينية</div></div>
+            <div class="stat-card"><div class="number" id="totalCount">0</div><div class="label">إجمالي الطلبات</div></div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="filterRequests('all', this)">الكل</button>
+            <button class="tab" onclick="filterRequests('urgent', this)">🔴 مستعجلة</button>
+            <button class="tab" onclick="filterRequests('medium', this)">🟡 متوسطة</button>
+            <button class="tab" onclick="filterRequests('low', this)">🟢 روتينية</button>
+            <button class="tab" onclick="filterRequests('approved', this)">✅ معتمدة</button>
+        </div>
+
+        <div id="requestsList">
+            <div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i><p>جاري تحميل البيانات...</p></div>
+        </div>
+    </div>
+</section>
+
+<script type="module">
+    import { db, ref, onValue, update } from './firebase.js';
+
+    let currentFilter = 'all';
+    let allRequests = [];
+
+    // ===== نظام التقييم النمطي (Scoring Matrix) =====
+    function calculateScore(data) {
+        let score = 0;
+        let breakdown = [];
+        if (data.familySize >= 6) { score += 3; breakdown.push({ label: 'أسرة كبيرة (6+ أفراد)', points: 3 }); }
+        else if (data.familySize >= 4) { score += 2; breakdown.push({ label: 'أسرة متوسطة (4-5 أفراد)', points: 2 }); }
+        if (data.childrenCount >= 3) { score += 3; breakdown.push({ label: '3+ أطفال', points: 3 }); }
+        else if (data.childrenCount >= 1) { score += 2; breakdown.push({ label: 'أطفال', points: 2 }); }
+        if (data.hasInfants) { score += 3; breakdown.push({ label: 'أطفال رضّع', points: 3 }); }
+        if (data.hasDisabled) { score += 4; breakdown.push({ label: 'أشخاص ذوي إعاقة', points: 4 }); }
+        if (data.hasChronicDisease) { score += 4; breakdown.push({ label: 'أمراض مزمنة', points: 4 }); }
+        if (data.needsMedicalDevices) { score += 5; breakdown.push({ label: 'أجهزة طبية عاجلة', points: 5 }); }
+        if (data.evictionThreat) { score += 5; breakdown.push({ label: 'تهديد بالطرد', points: 5 }); }
+        if (data.housingDisaster) { score += 5; breakdown.push({ label: 'كارثة سكنية', points: 5 }); }
+        if (data.housingType === 'informal') { score += 3; breakdown.push({ label: 'سكن عشوائي', points: 3 }); }
+        if (data.hasIncome === 'no') { score += 4; breakdown.push({ label: 'لا يوجد دخل', points: 4 }); }
+        else if (data.hasIncome === 'partial') { score += 2; breakdown.push({ label: 'دخل جزئي', points: 2 }); }
+        if (!data.receivesAid) { score += 2; breakdown.push({ label: 'لا مساعدات أخرى', points: 2 }); }
+
+        let priority = 'low';
+        if (score >= 20) priority = 'urgent';
+        else if (score >= 10) priority = 'medium';
+        return { score, breakdown, priority };
+    }
+
+    function getPriorityLabel(p) { return { urgent: 'مستعجلة', medium: 'متوسطة', low: 'روتينية' }[p]; }
+    function getPriorityEmoji(p) { return { urgent: '🔴', medium: '🟡', low: '🟢' }[p]; }
+
+    // ===== الاستماع للبيانات لحظياً من Firebase =====
+    onValue(ref(db, 'requests/needy'), (snapshot) => {
+        const data = snapshot.val();
+        allRequests = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
+        allRequests.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+        displayRequests();
+    });
+
+    function displayRequests() {
+        const requestsList = document.getElementById('requestsList');
+        if (allRequests.length === 0) {
+            requestsList.innerHTML = '<div class="empty-state"><i class="fa-solid fa-inbox"></i><p>لا توجد طلبات حالياً</p></div>';
+            updateStats(0, 0, 0, 0);
+            return;
+        }
+
+        let urgentCount = 0, mediumCount = 0, lowCount = 0;
+        let filteredRequests = allRequests;
+        
+        if (currentFilter !== 'all') {
+            filteredRequests = allRequests.filter(req => {
+                const effPriority = req.adminPriority || calculateScore(req).priority;
+                if (currentFilter === 'approved') return req.status === 'approved';
+                return effPriority === currentFilter;
+            });
+        }
+
+        allRequests.forEach(req => {
+            const { priority } = calculateScore(req);
+            if (priority === 'urgent') urgentCount++;
+            else if (priority === 'medium') mediumCount++;
+            else lowCount++;
+        });
+
+        if (filteredRequests.length === 0) {
+            requestsList.innerHTML = '<div class="empty-state"><i class="fa-solid fa-filter"></i><p>لا توجد طلبات في هذا التصنيف</p></div>';
+            updateStats(urgentCount, mediumCount, lowCount, allRequests.length);
+            return;
+        }
+
+        requestsList.innerHTML = filteredRequests.map(req => {
+            const { score, breakdown, priority: autoPriority } = calculateScore(req);
+            const effectivePriority = req.adminPriority || autoPriority;
+            const isManual = req.adminPriority && req.adminPriority !== autoPriority;
+            
+            const breakdownHTML = breakdown.length > 0 ? breakdown.map(item => `
+                <div class="score-item"><span class="label">${item.label}</span><span class="points">+${item.points}</span></div>
+            `).join('') : '<div class="score-item"><span class="label">لا توجد معايير مطابقة</span><span class="points">0</span></div>';
+
+            const statusBadge = req.status === 'approved' ? '<span class="status-badge approved">معتمد</span>' :
+                               req.status === 'rejected' ? '<span class="status-badge rejected">مرفوض</span>' :
+                               '<span class="status-badge pending">قيد المراجعة</span>';
+
+            // تحويل timestamp إلى تاريخ مقروء
+            const dateStr = req.timestamp ? new Date(req.timestamp).toLocaleString('ar-DZ') : 'غير محدد';
+
+            return `
+                <div class="request-card ${effectivePriority}" id="req-${req.id}">
+                    <div class="request-header">
+                        <div class="request-title">
+                            <i class="fa-solid fa-user"></i> ${req.fullName}
+                            ${statusBadge}
+                            ${isManual ? '<span class="auto-badge manual"><i class="fa-solid fa-hand"></i> تعديل يدوي</span>' : '<span class="auto-badge ai"><i class="fa-solid fa-robot"></i> تصنيف آلي</span>'}
+                        </div>
+                        <div class="priority-control">
+                            <label><i class="fa-solid fa-sliders"></i> تصنيف الإدارة:</label>
+                            <select class="priority-select ${effectivePriority}" onchange="window.updatePriority('${req.id}', this.value)">
+                                <option value="urgent" ${effectivePriority === 'urgent' ? 'selected' : ''}>🔴 مستعجلة</option>
+                                <option value="medium" ${effectivePriority === 'medium' ? 'selected' : ''}>🟡 متوسطة</option>
+                                <option value="low" ${effectivePriority === 'low' ? 'selected' : ''}>🟢 روتينية</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="request-details">
+                        <div class="detail-item"><strong>الهاتف</strong><span>${req.phone}</span></div>
+                        <div class="detail-item"><strong>الموقع</strong><span>${req.state} - ${req.city}</span></div>
+                        <div class="detail-item"><strong>حجم الأسرة</strong><span>${req.familySize} أفراد</span></div>
+                        <div class="detail-item"><strong>نوع المساعدة</strong><span>${req.helpType}</span></div>
+                        <div class="detail-item"><strong>تاريخ الطلب</strong><span>${dateStr}</span></div>
+                    </div>
+                    <div class="scoring-box">
+                        <h4><i class="fa-solid fa-calculator"></i> نظام التقييم النمطي (Scoring Matrix) - ${score} نقطة</h4>
+                        ${breakdownHTML}
+                        <div class="total-score">
+                            <span>المجموع الكلي</span>
+                            <span>${score} نقطة → ${getPriorityEmoji(autoPriority)} ${getPriorityLabel(autoPriority)}</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn approve" onclick="window.approveRequest('${req.fullName}', '${effectivePriority}', '${req.id}')">
+                            <i class="fa-solid fa-check"></i> اعتماد الطلب
+                        </button>
+                        <button class="action-btn reject" onclick="window.rejectRequest('${req.fullName}', '${req.id}')">
+                            <i class="fa-solid fa-xmark"></i> رفض الطلب
+                        </button>
+                        <button class="action-btn pending" onclick="window.requestMoreInfo('${req.fullName}')">
+                            <i class="fa-solid fa-circle-info"></i> طلب معلومات إضافية
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        updateStats(urgentCount, mediumCount, lowCount, allRequests.length);
+    }
+
+    function updateStats(urgent, medium, low, total) {
+        document.getElementById('urgentCount').textContent = urgent;
+        document.getElementById('mediumCount').textContent = medium;
+        document.getElementById('lowCount').textContent = low;
+        document.getElementById('totalCount').textContent = total;
+    }
+
+    // ===== دوال عالمية (Global) لتعمل من داخل HTML =====
+    window.updatePriority = function(id, newPriority) {
+        update(ref(db, `requests/needy/${id}`), { adminPriority: newPriority })
+            .then(() => console.log("Priority updated"))
+            .catch(err => console.error("Error updating priority:", err));
+    };
+
+    window.approveRequest = function(name, priority, id) {
+        if (priority === 'urgent') {
+            const req = allRequests.find(r => r.id === id);
+            if (req && !req.doubleApproval) {
+                update(ref(db, `requests/needy/${id}`), { doubleApproval: 1, status: 'pending_double_approval' })
+                .then(() => alert(`⚠️ اعتماد مزدوج مطلوب!\nتم تسجيل اعتمادك الأول لطلب: ${name}\nفي انتظار الاعتماد الثاني...`));
+                return;
+            } else if (req && req.doubleApproval === 1) {
+                update(ref(db, `requests/needy/${id}`), { doubleApproval: 2, status: 'approved' })
+                .then(() => alert(`✅ تم الاعتماد المزدوج لطلب: ${name}`));
+                return;
+            }
+        } else {
+            update(ref(db, `requests/needy/${id}`), { status: 'approved' })
+            .then(() => alert(`✅ تم اعتماد طلب: ${name}`));
+        }
+    };
+
+    window.rejectRequest = function(name, id) {
+        if (confirm(`هل أنت متأكد من رفض طلب: ${name}؟`)) {
+            update(ref(db, `requests/needy/${id}`), { status: 'rejected' })
+            .then(() => alert(`❌ تم رفض الطلب.`));
+        }
+    };
+
+    window.requestMoreInfo = function(name) {
+        alert(`📋 تم إرسال طلب معلومات إضافية لـ: ${name}`);
+    };
+
+    window.filterRequests = function(filter, btn) {
+        currentFilter = filter;
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+        displayRequests();
+    };
+
+    const menuToggle = document.querySelector('.menu-toggle');
+    const mainNav = document.querySelector('.main-nav');
+    if (menuToggle && mainNav) {
+        menuToggle.addEventListener('click', () => {
+            mainNav.style.display = mainNav.style.display === 'flex' ? 'none' : 'flex';
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "وصْل - جسر العطاء الذكي",
+  "short_name": "وصْل",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0f141a",
+  "theme_color": "#181d25",
+  "orientation": "portrait",
+  "description": "منصة ذكية تربط الجمعيات بالمتطوعين والمحتاجين",
+  "icons": [
+    {
+      "src": "assets/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
