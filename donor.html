@@ -7,11 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
-    
-    <!-- Firebase عبر CDN مباشرة (بدون modules) -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-    
     <style>
         .page-header { padding: 120px 0 40px; background: var(--bg); text-align: center; border-bottom: 1px solid var(--border); }
         .page-header h1 { font-size: 2.5rem; color: var(--text); margin-bottom: 10px; }
@@ -30,23 +25,9 @@
         .tracking-info p { color: var(--text-muted); margin: 0; line-height: 1.7; }
         
         .donation-type-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
-        .type-option { 
-            background: var(--bg); 
-            border: 2px solid var(--border); 
-            border-radius: 12px; 
-            padding: 1.5rem; 
-            text-align: center; 
-            cursor: pointer; 
-            transition: all 0.3s; 
-            user-select: none;
-            font-family: 'Cairo', sans-serif;
-        }
+        .type-option { background: var(--bg); border: 2px solid var(--border); border-radius: 12px; padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.3s; user-select: none; font-family: 'Cairo', sans-serif; }
         .type-option:hover { border-color: var(--primary); transform: translateY(-3px); }
-        .type-option.active { 
-            border-color: var(--primary); 
-            background: #f0fdfa; 
-            box-shadow: 0 4px 12px rgba(15, 91, 78, 0.15);
-        }
+        .type-option.active { border-color: var(--primary); background: #f0fdfa; box-shadow: 0 4px 12px rgba(15, 91, 78, 0.15); }
         .type-option i.main-icon { font-size: 2.5rem; color: var(--primary); margin-bottom: 0.75rem; display: block; }
         .type-option h4 { color: var(--text); margin-bottom: 0.5rem; font-size: 1.1rem; font-weight: 800; margin: 0.5rem 0; }
         .type-option p { color: var(--text-muted); font-size: 0.85rem; margin: 0; }
@@ -68,10 +49,10 @@
         <a href="index.html" class="logo"><img src="assets/logo.png" alt="وصْل"><span>وصْل</span></a>
         <nav class="main-nav">
             <a href="index.html">الرئيسية</a>
+            <a href="track.html"><i class="fa-solid fa-magnifying-glass-location"></i> تتبع طلبك</a>
             <a href="needy.html">طلب مساعدة</a>
             <a href="association.html">الجمعيات</a>
             <a href="volunteer.html">المتطوعين</a>
-            <a href="admin.html">لوحة التحكم</a>
         </nav>
         <button class="menu-toggle" aria-label="القائمة"><i class="fa-solid fa-bars"></i></button>
     </div>
@@ -80,7 +61,7 @@
 <section class="page-header">
     <div class="container">
         <h1><i class="fa-solid fa-hand-holding-heart"></i> بوابة المتبرعين</h1>
-        <p>تبرعك يصل لمستحقه بشفافية كاملة مع تتبع الأثر (Real-time Tracking)</p>
+        <p>تبرعك يصل لمستحقه بشفافية كاملة مع تتبع الأثر</p>
     </div>
 </section>
 
@@ -89,7 +70,7 @@
         <div class="tracking-info">
             <i class="fa-solid fa-chart-line"></i>
             <div>
-                <p><strong>تتبع الأثر والشفافية:</strong> بعد تبرعك، ستحصل على تقرير يوضح أين ذهب تبرعك بالضبط، مما يبني الثقة ويضمن وصول المساعدة لمستحقيها.</p>
+                <p><strong>تتبع الأثر والشفافية:</strong> بعد تبرعك، ستحصل على كود تتبع يمكنك من متابعة أين ذهب تبرعك بالضبط.</p>
             </div>
         </div>
 
@@ -194,14 +175,17 @@
     </div>
 </section>
 
+<div id="toastContainer" style="position: fixed; top: 90px; left: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px;"></div>
+
 <footer class="site-footer">
     <div class="container">
         <div class="footer-bottom"><p>&copy; <span id="current-year"></span> منصة وصْل - جميع الحقوق محفوظة.</p></div>
     </div>
 </footer>
 
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script>
-    // ===== تهيئة Firebase =====
     const firebaseConfig = {
         apiKey: "AIzaSyDWcHnd1gm2L8Fbq-GaoyVJJk3tySbzSvk",
         authDomain: "wasl-fba4b.firebaseapp.com",
@@ -212,73 +196,67 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-    
-    console.log('✅ Firebase initialized');
-    console.log('✅ DOM ready');
 
-    // ===== السنة =====
     document.getElementById('current-year').textContent = new Date().getFullYear();
 
-    // ===== عناصر DOM =====
-    const optionMaterial = document.getElementById('optionMaterial');
-    const optionNonMaterial = document.getElementById('optionNonMaterial');
-    const materialFields = document.getElementById('materialFields');
-    const nonMaterialFields = document.getElementById('nonMaterialFields');
-    const selectedTypeInput = document.getElementById('selectedDonationType');
+    function showToast(message, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        const icons = { success: 'fa-circle-check', error: 'fa-circle-xmark', info: 'fa-circle-info', warning: 'fa-triangle-exclamation' };
+        const colors = { success: '#22c55e', error: '#ef4444', info: '#3b82f6', warning: '#eab308' };
+        toast.style.cssText = `background: white; border-right: 4px solid ${colors[type]}; padding: 1rem 1.5rem; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 10px; min-width: 280px; animation: slideIn 0.3s ease; font-family: 'Cairo', sans-serif;`;
+        toast.innerHTML = `<i class="fa-solid ${icons[type]}" style="color: ${colors[type]}; font-size: 1.2rem;"></i><span style="flex: 1; font-weight: 600; color: #1f2937;">${message}</span>`;
+        container.appendChild(toast);
+        setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateX(-100%)'; toast.style.transition = 'all 0.3s'; setTimeout(() => toast.remove(), 300); }, 4000);
+    }
 
-    console.log('✅ Elements:', {
-        optionMaterial: !!optionMaterial,
-        optionNonMaterial: !!optionNonMaterial,
-        materialFields: !!materialFields,
-        nonMaterialFields: !!nonMaterialFields
-    });
+    function generateTrackingCode() {
+        return `WSL-${Math.floor(1000 + Math.random() * 9000)}`;
+    }
 
-    // ===== دالة التبديل =====
     function selectDonationType(type) {
-        console.log('🔄 Switching to:', type);
-        
+        const materialFields = document.getElementById('materialFields');
+        const nonMaterialFields = document.getElementById('nonMaterialFields');
+        const optionMaterial = document.getElementById('optionMaterial');
+        const optionNonMaterial = document.getElementById('optionNonMaterial');
+        const selectedTypeInput = document.getElementById('selectedDonationType');
+
         if (type === 'material') {
             materialFields.style.display = 'block';
             nonMaterialFields.style.display = 'none';
             optionMaterial.classList.add('active');
             optionNonMaterial.classList.remove('active');
             selectedTypeInput.value = 'material';
-            console.log('✅ Material shown');
         } else {
             materialFields.style.display = 'none';
             nonMaterialFields.style.display = 'block';
             optionNonMaterial.classList.add('active');
             optionMaterial.classList.remove('active');
             selectedTypeInput.value = 'non-material';
-            console.log('✅ Non-material shown');
         }
     }
 
-    // ===== ربط الأزرار =====
-    optionMaterial.addEventListener('click', function(e) {
+    document.getElementById('optionMaterial').addEventListener('click', function(e) {
         e.preventDefault();
-        console.log('👆 Material clicked');
         selectDonationType('material');
     });
 
-    optionNonMaterial.addEventListener('click', function(e) {
+    document.getElementById('optionNonMaterial').addEventListener('click', function(e) {
         e.preventDefault();
-        console.log('👆 Non-material clicked');
         selectDonationType('non-material');
     });
 
-    console.log('✅ Event listeners attached');
-
-    // ===== إرسال النموذج =====
     document.getElementById('donorForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
         btn.disabled = true;
         btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري التسجيل...';
         
-        const category = selectedTypeInput.value;
+        const category = document.getElementById('selectedDonationType').value;
+        const trackingCode = generateTrackingCode();
+        showToast('جاري تسجيل تبرعك...', 'info');
+        
         let donationData = {};
-
         if (category === 'material') {
             donationData = {
                 type: 'material',
@@ -302,6 +280,7 @@
             donation: donationData,
             preferredAssoc: document.getElementById('preferredAssoc').value,
             notes: document.getElementById('donationNotes').value,
+            trackingCode: trackingCode,
             status: 'received',
             timestamp: firebase.database.ServerValue.TIMESTAMP
         };
@@ -309,13 +288,32 @@
         db.ref('requests/donors').push(data)
             .then(() => {
                 const typeName = category === 'material' ? 'مادي' : 'غير مادي';
-                alert('✅ تم تسجيل تبرعك ' + typeName + ' بنجاح!');
+                showToast('✅ تم تسجيل تبرعك ' + typeName + ' بنجاح!', 'success');
+                
+                const codeDisplay = `
+                    <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px;">
+                        <div style="background: white; border-radius: 20px; padding: 2.5rem; max-width: 450px; width: 100%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+                            <i class="fa-solid fa-hand-holding-heart" style="font-size: 4rem; color: var(--accent); margin-bottom: 1rem;"></i>
+                            <h2 style="color: var(--primary); margin-bottom: 1rem;">شكراً لتبرعك!</h2>
+                            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">احفظ كود التتبع لمتابعة أين ذهب تبرعك</p>
+                            <div style="background: #fef3c7; border: 2px dashed var(--accent); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                                <div style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">كود التتبع</div>
+                                <div style="font-size: 2.5rem; font-weight: 900; color: var(--accent); letter-spacing: 3px;">${trackingCode}</div>
+                            </div>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">سنرسل لك تقرير الأثر عند اكتمال التوزيع</p>
+                            <div style="display: flex; gap: 10px;">
+                                <a href="track.html" style="flex: 1; padding: 12px; background: var(--accent); color: white; border-radius: 10px; text-decoration: none; font-weight: 700;">تتبع التبرع</a>
+                                <button onclick="this.parentElement.parentElement.parentElement.remove()" style="flex: 1; padding: 12px; background: var(--bg-alt); color: var(--text); border: 1px solid var(--border); border-radius: 10px; font-weight: 700; cursor: pointer; font-family: 'Cairo';">إغلاق</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.body.insertAdjacentHTML('beforeend', codeDisplay);
                 this.reset();
                 selectDonationType('material');
             })
             .catch((error) => {
-                console.error('Error:', error);
-                alert('حدث خطأ: ' + error.message);
+                showToast('حدث خطأ: ' + error.message, 'error');
             })
             .finally(() => {
                 btn.disabled = false;
@@ -323,7 +321,6 @@
             });
     });
 
-    // ===== القائمة المتحركة =====
     const menuToggle = document.querySelector('.menu-toggle');
     const mainNav = document.querySelector('.main-nav');
     if (menuToggle && mainNav) {
@@ -332,5 +329,9 @@
         });
     }
 </script>
+
+<style>
+    @keyframes slideIn { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+</style>
 </body>
 </html>
