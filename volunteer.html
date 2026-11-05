@@ -37,10 +37,10 @@
         <a href="index.html" class="logo"><img src="assets/logo.png" alt="وصْل"><span>وصْل</span></a>
         <nav class="main-nav">
             <a href="index.html">الرئيسية</a>
+            <a href="track.html"><i class="fa-solid fa-magnifying-glass-location"></i> تتبع طلبك</a>
             <a href="needy.html">طلب مساعدة</a>
             <a href="association.html">الجمعيات</a>
             <a href="donor.html">المتبرعين</a>
-            <a href="admin.html">لوحة التحكم</a>
         </nav>
         <button class="menu-toggle" aria-label="القائمة"><i class="fa-solid fa-bars"></i></button>
     </div>
@@ -49,7 +49,7 @@
 <section class="page-header">
     <div class="container">
         <h1><i class="fa-solid fa-users"></i> بوابة المتطوعين</h1>
-        <p>انضم إلى شبكة العطاء واحصل على جواز التطوع الرقمي (Passport Volontariat)</p>
+        <p>انضم إلى شبكة العطاء واحصل على جواز التطوع الرقمي</p>
     </div>
 </section>
 
@@ -58,7 +58,7 @@
         <div class="passport-box">
             <i class="fa-solid fa-id-card"></i>
             <h3>جواز التطوع الرقمي</h3>
-            <p>سجل رقمي موثق يسجل كل ساعات تطوعك والجمعيات التي ساعدتها. يمكنك استخدامه في سيرتك الذاتية.</p>
+            <p>سجل رقمي موثق يسجل كل ساعات تطوعك والجمعيات التي ساعدتها</p>
         </div>
 
         <form id="volunteerForm">
@@ -97,17 +97,17 @@
                     <label>مجال التطوع المفضل <span class="required">*</span></label>
                     <select id="volSkill" required>
                         <option value="">اختر المجال...</option>
-                        <option value="distribution">توزيع مساعدات غذائية أو ملابس</option>
+                        <option value="distribution">توزيع مساعدات غذائية/ملابس</option>
                         <option value="events">تنظيم فعاليات وأنشطة</option>
-                        <option value="medical">مساعدة طبية أو تمريضية</option>
-                        <option value="admin">دعم إداري أو لوجستي</option>
+                        <option value="medical">مساعدة طبية/تمريضية</option>
+                        <option value="admin">دعم إداري/لوجستي</option>
                         <option value="transport">نقل ومواصلات</option>
                         <option value="other">أخرى</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>هل لديك مهارات خاصة؟ (إسعافات أولية، قيادة، لغات...)</label>
-                    <textarea id="volSkillsDetails" rows="3" placeholder="اذكر مهاراتك هنا..."></textarea>
+                    <label>هل لديك مهارات خاصة؟</label>
+                    <textarea id="volSkillsDetails" rows="3" placeholder="إسعافات أولية، قيادة، لغات..."></textarea>
                 </div>
             </div>
 
@@ -130,22 +130,53 @@
     </div>
 </section>
 
+<div id="toastContainer" style="position: fixed; top: 90px; left: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px;"></div>
+
 <footer class="site-footer">
     <div class="container">
         <div class="footer-bottom"><p>&copy; <span id="current-year"></span> منصة وصْل - جميع الحقوق محفوظة.</p></div>
     </div>
 </footer>
 
-<script type="module">
-    import { db, ref, push, serverTimestamp } from './firebase.js';
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDWcHnd1gm2L8Fbq-GaoyVJJk3tySbzSvk",
+        authDomain: "wasl-fba4b.firebaseapp.com",
+        projectId: "wasl-fba4b",
+        storageBucket: "wasl-fba4b.firebasestorage.app",
+        messagingSenderId: "604065858483",
+        appId: "1:604065858483:web:398fae3b5c8f28a06a01c6"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
     document.getElementById('current-year').textContent = new Date().getFullYear();
 
-    document.getElementById('volunteerForm').addEventListener('submit', async function(e) {
+    function showToast(message, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        const icons = { success: 'fa-circle-check', error: 'fa-circle-xmark', info: 'fa-circle-info', warning: 'fa-triangle-exclamation' };
+        const colors = { success: '#22c55e', error: '#ef4444', info: '#3b82f6', warning: '#eab308' };
+        toast.style.cssText = `background: white; border-right: 4px solid ${colors[type]}; padding: 1rem 1.5rem; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 10px; min-width: 280px; animation: slideIn 0.3s ease; font-family: 'Cairo', sans-serif;`;
+        toast.innerHTML = `<i class="fa-solid ${icons[type]}" style="color: ${colors[type]}; font-size: 1.2rem;"></i><span style="flex: 1; font-weight: 600; color: #1f2937;">${message}</span>`;
+        container.appendChild(toast);
+        setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateX(-100%)'; toast.style.transition = 'all 0.3s'; setTimeout(() => toast.remove(), 300); }, 4000);
+    }
+
+    function generateTrackingCode() {
+        return `WSL-${Math.floor(1000 + Math.random() * 9000)}`;
+    }
+
+    document.getElementById('volunteerForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
         btn.disabled = true;
         btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري التسجيل...';
+
+        const trackingCode = generateTrackingCode();
+        showToast('جاري تسجيل تطوعك...', 'info');
 
         const data = {
             type: 'volunteer',
@@ -157,21 +188,42 @@
             skillsDetails: document.getElementById('volSkillsDetails').value,
             hours: document.getElementById('volHours').value,
             days: document.getElementById('volDays').value,
+            trackingCode: trackingCode,
             status: 'active',
-            timestamp: serverTimestamp()
+            timestamp: firebase.database.ServerValue.TIMESTAMP
         };
 
-        try {
-            await push(ref(db, 'requests/volunteers'), data);
-            alert('✅ تم تسجيلك كمتطوع بنجاح!\n\nتم إنشاء جواز التطوع الرقمي الخاص بك.');
-            this.reset();
-        } catch (error) {
-            console.error("Error:", error);
-            alert('حدث خطأ أثناء التسجيل، يرجى المحاولة لاحقاً.');
-        } finally {
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fa-solid fa-hand-holding-heart"></i> تأكيد التطوع والحصول على الجواز';
-        }
+        db.ref('requests/volunteers').push(data)
+            .then(() => {
+                showToast('✅ تم تسجيلك كمتطوع بنجاح!', 'success');
+                const codeDisplay = `
+                    <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px;">
+                        <div style="background: white; border-radius: 20px; padding: 2.5rem; max-width: 450px; width: 100%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+                            <i class="fa-solid fa-id-card" style="font-size: 4rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                            <h2 style="color: var(--primary); margin-bottom: 1rem;">مرحباً بك في وصْل!</h2>
+                            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">تم إنشاء جواز التطوع الرقمي الخاص بك</p>
+                            <div style="background: #f0fdfa; border: 2px dashed var(--primary); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                                <div style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">كود المتطوع الخاص بك</div>
+                                <div style="font-size: 2.5rem; font-weight: 900; color: var(--primary); letter-spacing: 3px;">${trackingCode}</div>
+                            </div>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">احفظ هذا الكود لمتابعة فرص التطوع</p>
+                            <div style="display: flex; gap: 10px;">
+                                <a href="track.html" style="flex: 1; padding: 12px; background: var(--primary); color: white; border-radius: 10px; text-decoration: none; font-weight: 700;">تتبع الطلب</a>
+                                <button onclick="this.parentElement.parentElement.parentElement.remove()" style="flex: 1; padding: 12px; background: var(--bg-alt); color: var(--text); border: 1px solid var(--border); border-radius: 10px; font-weight: 700; cursor: pointer; font-family: 'Cairo';">إغلاق</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.body.insertAdjacentHTML('beforeend', codeDisplay);
+                this.reset();
+            })
+            .catch((error) => {
+                showToast('حدث خطأ: ' + error.message, 'error');
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-hand-holding-heart"></i> تأكيد التطوع والحصول على الجواز';
+            });
     });
 
     const menuToggle = document.querySelector('.menu-toggle');
@@ -182,5 +234,9 @@
         });
     }
 </script>
+
+<style>
+    @keyframes slideIn { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+</style>
 </body>
 </html>
