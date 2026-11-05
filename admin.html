@@ -13,28 +13,33 @@
         .admin-header h1 { font-size: 2.5rem; color: var(--text); margin-bottom: 10px; }
         .admin-header p { color: var(--text-muted); font-size: 1.1rem; }
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
-        .stat-card { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; text-align: center; transition: 0.3s; }
+        .stat-card { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; text-align: center; transition: 0.3s; cursor: pointer; }
         .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
         .stat-card.urgent { border-color: #ef4444; }
         .stat-card.medium { border-color: #eab308; }
         .stat-card.low { border-color: #22c55e; }
+        .stat-card.new { border-color: #3b82f6; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); } 50% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); } }
         .stat-card .number { font-size: 2.5rem; font-weight: 900; margin-bottom: 0.5rem; }
         .stat-card.urgent .number { color: #ef4444; }
         .stat-card.medium .number { color: #eab308; }
         .stat-card.low .number { color: #22c55e; }
+        .stat-card.new .number { color: #3b82f6; }
         .stat-card .label { color: var(--text-muted); font-size: 0.95rem; }
         .requests-container { max-width: 1200px; margin: 0 auto; padding: 40px 0; }
         .tabs { display: flex; gap: 10px; margin-bottom: 2rem; flex-wrap: wrap; }
-        .tab { padding: 10px 20px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; font-weight: 700; transition: 0.3s; font-family: 'Cairo', sans-serif; color: var(--text); }
+        .tab { padding: 10px 20px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; font-weight: 700; transition: 0.3s; font-family: 'Cairo', sans-serif; color: var(--text); position: relative; }
         .tab:hover { border-color: var(--primary); color: var(--primary); }
         .tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .tab .badge { position: absolute; top: -8px; right: -8px; background: #ef4444; color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; font-weight: 800; }
         .request-card { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; transition: 0.3s; }
         .request-card:hover { box-shadow: var(--shadow-lg); }
         .request-card.urgent { border-right: 4px solid #ef4444; }
         .request-card.medium { border-right: 4px solid #eab308; }
         .request-card.low { border-right: 4px solid #22c55e; }
         .request-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
-        .request-title { font-size: 1.3rem; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 10px; }
+        .request-title { font-size: 1.3rem; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .tracking-code-display { background: var(--bg-alt); padding: 4px 12px; border-radius: 8px; font-size: 0.9rem; font-weight: 700; color: var(--primary); letter-spacing: 1px; }
         .priority-control { display: flex; align-items: center; gap: 10px; }
         .priority-control label { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; }
         .priority-select { padding: 8px 16px; border-radius: 20px; border: 2px solid var(--border); font-family: 'Cairo', sans-serif; font-weight: 700; cursor: pointer; transition: 0.3s; background: white; font-size: 0.95rem; }
@@ -86,6 +91,7 @@
         <a href="index.html" class="logo"><img src="assets/logo.png" alt="وصْل"><span>وصْل</span></a>
         <nav class="main-nav">
             <a href="index.html">الرئيسية</a>
+            <a href="track.html">تتبع الطلبات</a>
             <a href="needy.html">طلب مساعدة</a>
             <a href="association.html">الجمعيات</a>
             <a href="volunteer.html">المتطوعين</a>
@@ -98,21 +104,38 @@
 <section class="admin-header">
     <div class="container">
         <h1><i class="fa-solid fa-shield-halved"></i> لوحة الإدارة</h1>
-        <p>نظام إدارة الأولويات والمطابقة الذكية - Scoring Matrix + Geo-Targeting + اعتماد مزدوج</p>
+        <p>نظام إدارة الأولويات والمطابقة الذكية - Scoring Matrix + Geo-Targeting</p>
     </div>
 </section>
 
 <section class="requests-container">
     <div class="container">
         <div class="stats-grid">
-            <div class="stat-card urgent"><div class="number" id="urgentCount">0</div><div class="label">حالات مستعجلة</div></div>
-            <div class="stat-card medium"><div class="number" id="mediumCount">0</div><div class="label">حالات متوسطة</div></div>
-            <div class="stat-card low"><div class="number" id="lowCount">0</div><div class="label">حالات روتينية</div></div>
-            <div class="stat-card"><div class="number" id="totalCount">0</div><div class="label">إجمالي الطلبات</div></div>
+            <div class="stat-card new" id="newStatCard">
+                <div class="number" id="newCount">0</div>
+                <div class="label"><i class="fa-solid fa-bell"></i> طلبات جديدة</div>
+            </div>
+            <div class="stat-card urgent">
+                <div class="number" id="urgentCount">0</div>
+                <div class="label">حالات مستعجلة</div>
+            </div>
+            <div class="stat-card medium">
+                <div class="number" id="mediumCount">0</div>
+                <div class="label">حالات متوسطة</div>
+            </div>
+            <div class="stat-card low">
+                <div class="number" id="lowCount">0</div>
+                <div class="label">حالات روتينية</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="totalCount">0</div>
+                <div class="label">إجمالي الطلبات</div>
+            </div>
         </div>
 
         <div class="tabs">
             <button class="tab active" onclick="filterRequests('all', this)">الكل</button>
+            <button class="tab" onclick="filterRequests('new', this)">🔵 جديدة <span class="badge" id="newBadge" style="display:none;">0</span></button>
             <button class="tab" onclick="filterRequests('urgent', this)">🔴 مستعجلة</button>
             <button class="tab" onclick="filterRequests('medium', this)">🟡 متوسطة</button>
             <button class="tab" onclick="filterRequests('low', this)">🟢 روتينية</button>
@@ -125,13 +148,37 @@
     </div>
 </section>
 
-<script type="module">
-    import { db, ref, onValue, update } from './firebase.js';
+<div id="toastContainer" style="position: fixed; top: 90px; left: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px;"></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDWcHnd1gm2L8Fbq-GaoyVJJk3tySbzSvk",
+        authDomain: "wasl-fba4b.firebaseapp.com",
+        projectId: "wasl-fba4b",
+        storageBucket: "wasl-fba4b.firebasestorage.app",
+        messagingSenderId: "604065858483",
+        appId: "1:604065858483:web:398fae3b5c8f28a06a01c6"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
     let currentFilter = 'all';
     let allRequests = [];
+    let lastCount = 0;
 
-    // ===== نظام التقييم النمطي (Scoring Matrix) =====
+    function showToast(message, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        const icons = { success: 'fa-circle-check', error: 'fa-circle-xmark', info: 'fa-circle-info', warning: 'fa-triangle-exclamation', new: 'fa-bell' };
+        const colors = { success: '#22c55e', error: '#ef4444', info: '#3b82f6', warning: '#eab308', new: '#3b82f6' };
+        toast.style.cssText = `background: white; border-right: 4px solid ${colors[type]}; padding: 1rem 1.5rem; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 10px; min-width: 280px; animation: slideIn 0.3s ease; font-family: 'Cairo', sans-serif;`;
+        toast.innerHTML = `<i class="fa-solid ${icons[type]}" style="color: ${colors[type]}; font-size: 1.2rem;"></i><span style="flex: 1; font-weight: 600; color: #1f2937;">${message}</span>`;
+        container.appendChild(toast);
+        setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateX(-100%)'; toast.style.transition = 'all 0.3s'; setTimeout(() => toast.remove(), 300); }, 4000);
+    }
+
     function calculateScore(data) {
         let score = 0;
         let breakdown = [];
@@ -159,11 +206,21 @@
     function getPriorityLabel(p) { return { urgent: 'مستعجلة', medium: 'متوسطة', low: 'روتينية' }[p]; }
     function getPriorityEmoji(p) { return { urgent: '🔴', medium: '🟡', low: '🟢' }[p]; }
 
-    // ===== الاستماع للبيانات لحظياً من Firebase =====
-    onValue(ref(db, 'requests/needy'), (snapshot) => {
+    // ===== الاستماع للبيانات لحظياً =====
+    db.ref('requests/needy').on('value', (snapshot) => {
         const data = snapshot.val();
-        allRequests = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
-        allRequests.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+        const newRequests = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
+        newRequests.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+        
+        // إشعار عند وصول طلب جديد
+        if (newRequests.length > lastCount && lastCount > 0) {
+            const newOnes = newRequests.slice(0, newRequests.length - lastCount);
+            newOnes.forEach(req => {
+                showToast(`🔔 طلب جديد: ${req.fullName || 'محتاج'} (${req.trackingCode || ''})`, 'new');
+            });
+        }
+        lastCount = newRequests.length;
+        allRequests = newRequests;
         displayRequests();
     });
 
@@ -171,17 +228,18 @@
         const requestsList = document.getElementById('requestsList');
         if (allRequests.length === 0) {
             requestsList.innerHTML = '<div class="empty-state"><i class="fa-solid fa-inbox"></i><p>لا توجد طلبات حالياً</p></div>';
-            updateStats(0, 0, 0, 0);
+            updateStats(0, 0, 0, 0, 0);
             return;
         }
 
-        let urgentCount = 0, mediumCount = 0, lowCount = 0;
+        let urgentCount = 0, mediumCount = 0, lowCount = 0, newCount = 0;
         let filteredRequests = allRequests;
         
         if (currentFilter !== 'all') {
             filteredRequests = allRequests.filter(req => {
                 const effPriority = req.adminPriority || calculateScore(req).priority;
                 if (currentFilter === 'approved') return req.status === 'approved';
+                if (currentFilter === 'new') return !req.adminReviewed;
                 return effPriority === currentFilter;
             });
         }
@@ -191,11 +249,12 @@
             if (priority === 'urgent') urgentCount++;
             else if (priority === 'medium') mediumCount++;
             else lowCount++;
+            if (!req.adminReviewed) newCount++;
         });
 
         if (filteredRequests.length === 0) {
             requestsList.innerHTML = '<div class="empty-state"><i class="fa-solid fa-filter"></i><p>لا توجد طلبات في هذا التصنيف</p></div>';
-            updateStats(urgentCount, mediumCount, lowCount, allRequests.length);
+            updateStats(urgentCount, mediumCount, lowCount, allRequests.length, newCount);
             return;
         }
 
@@ -203,6 +262,7 @@
             const { score, breakdown, priority: autoPriority } = calculateScore(req);
             const effectivePriority = req.adminPriority || autoPriority;
             const isManual = req.adminPriority && req.adminPriority !== autoPriority;
+            const dateStr = req.timestamp ? new Date(req.timestamp).toLocaleString('ar-DZ') : 'غير محدد';
             
             const breakdownHTML = breakdown.length > 0 ? breakdown.map(item => `
                 <div class="score-item"><span class="label">${item.label}</span><span class="points">+${item.points}</span></div>
@@ -212,15 +272,13 @@
                                req.status === 'rejected' ? '<span class="status-badge rejected">مرفوض</span>' :
                                '<span class="status-badge pending">قيد المراجعة</span>';
 
-            // تحويل timestamp إلى تاريخ مقروء
-            const dateStr = req.timestamp ? new Date(req.timestamp).toLocaleString('ar-DZ') : 'غير محدد';
-
             return `
                 <div class="request-card ${effectivePriority}" id="req-${req.id}">
                     <div class="request-header">
                         <div class="request-title">
-                            <i class="fa-solid fa-user"></i> ${req.fullName}
+                            <i class="fa-solid fa-user"></i> ${req.fullName || req.name || 'محتاج'}
                             ${statusBadge}
+                            <span class="tracking-code-display"><i class="fa-solid fa-barcode"></i> ${req.trackingCode || 'بدون كود'}</span>
                             ${isManual ? '<span class="auto-badge manual"><i class="fa-solid fa-hand"></i> تعديل يدوي</span>' : '<span class="auto-badge ai"><i class="fa-solid fa-robot"></i> تصنيف آلي</span>'}
                         </div>
                         <div class="priority-control">
@@ -233,14 +291,14 @@
                         </div>
                     </div>
                     <div class="request-details">
-                        <div class="detail-item"><strong>الهاتف</strong><span>${req.phone}</span></div>
-                        <div class="detail-item"><strong>الموقع</strong><span>${req.state} - ${req.city}</span></div>
-                        <div class="detail-item"><strong>حجم الأسرة</strong><span>${req.familySize} أفراد</span></div>
-                        <div class="detail-item"><strong>نوع المساعدة</strong><span>${req.helpType}</span></div>
+                        <div class="detail-item"><strong>الهاتف</strong><span>${req.phone || '-'}</span></div>
+                        <div class="detail-item"><strong>الموقع</strong><span>${req.state || '-'} - ${req.city || '-'}</span></div>
+                        <div class="detail-item"><strong>حجم الأسرة</strong><span>${req.familySize || '-'} أفراد</span></div>
+                        <div class="detail-item"><strong>نوع المساعدة</strong><span>${req.helpType || '-'}</span></div>
                         <div class="detail-item"><strong>تاريخ الطلب</strong><span>${dateStr}</span></div>
                     </div>
                     <div class="scoring-box">
-                        <h4><i class="fa-solid fa-calculator"></i> نظام التقييم النمطي (Scoring Matrix) - ${score} نقطة</h4>
+                        <h4><i class="fa-solid fa-calculator"></i> نظام التقييم النمطي - ${score} نقطة</h4>
                         ${breakdownHTML}
                         <div class="total-score">
                             <span>المجموع الكلي</span>
@@ -248,64 +306,81 @@
                         </div>
                     </div>
                     <div class="action-buttons">
-                        <button class="action-btn approve" onclick="window.approveRequest('${req.fullName}', '${effectivePriority}', '${req.id}')">
-                            <i class="fa-solid fa-check"></i> اعتماد الطلب
+                        <button class="action-btn approve" onclick="window.approveRequest('${req.fullName || req.name}', '${effectivePriority}', '${req.id}')">
+                            <i class="fa-solid fa-check"></i> اعتماد
                         </button>
-                        <button class="action-btn reject" onclick="window.rejectRequest('${req.fullName}', '${req.id}')">
-                            <i class="fa-solid fa-xmark"></i> رفض الطلب
+                        <button class="action-btn reject" onclick="window.rejectRequest('${req.fullName || req.name}', '${req.id}')">
+                            <i class="fa-solid fa-xmark"></i> رفض
                         </button>
-                        <button class="action-btn pending" onclick="window.requestMoreInfo('${req.fullName}')">
-                            <i class="fa-solid fa-circle-info"></i> طلب معلومات إضافية
+                        <button class="action-btn pending" onclick="window.requestMoreInfo('${req.fullName || req.name}', '${req.id}')">
+                            <i class="fa-solid fa-circle-info"></i> طلب معلومات
                         </button>
                     </div>
                 </div>
             `;
         }).join('');
 
-        updateStats(urgentCount, mediumCount, lowCount, allRequests.length);
+        updateStats(urgentCount, mediumCount, lowCount, allRequests.length, newCount);
     }
 
-    function updateStats(urgent, medium, low, total) {
+    function updateStats(urgent, medium, low, total, newC) {
         document.getElementById('urgentCount').textContent = urgent;
         document.getElementById('mediumCount').textContent = medium;
         document.getElementById('lowCount').textContent = low;
         document.getElementById('totalCount').textContent = total;
+        document.getElementById('newCount').textContent = newC;
+        
+        const newBadge = document.getElementById('newBadge');
+        if (newC > 0) {
+            newBadge.style.display = 'inline-block';
+            newBadge.textContent = newC;
+            document.getElementById('newStatCard').classList.add('new');
+        } else {
+            newBadge.style.display = 'none';
+            document.getElementById('newStatCard').classList.remove('new');
+        }
     }
 
-    // ===== دوال عالمية (Global) لتعمل من داخل HTML =====
     window.updatePriority = function(id, newPriority) {
-        update(ref(db, `requests/needy/${id}`), { adminPriority: newPriority })
-            .then(() => console.log("Priority updated"))
-            .catch(err => console.error("Error updating priority:", err));
+        db.ref(`requests/needy/${id}`).update({ adminPriority: newPriority, adminReviewed: true })
+            .then(() => {
+                showToast('✅ تم تحديث الأولوية', 'success');
+            })
+            .catch(err => showToast('خطأ في التحديث', 'error'));
     };
 
     window.approveRequest = function(name, priority, id) {
         if (priority === 'urgent') {
-            const req = allRequests.find(r => r.id === id);
-            if (req && !req.doubleApproval) {
-                update(ref(db, `requests/needy/${id}`), { doubleApproval: 1, status: 'pending_double_approval' })
-                .then(() => alert(`⚠️ اعتماد مزدوج مطلوب!\nتم تسجيل اعتمادك الأول لطلب: ${name}\nفي انتظار الاعتماد الثاني...`));
-                return;
-            } else if (req && req.doubleApproval === 1) {
-                update(ref(db, `requests/needy/${id}`), { doubleApproval: 2, status: 'approved' })
-                .then(() => alert(`✅ تم الاعتماد المزدوج لطلب: ${name}`));
-                return;
-            }
+            db.ref(`requests/needy/${id}`).once('value').then(snap => {
+                const data = snap.val();
+                if (!data.doubleApproval) {
+                    db.ref(`requests/needy/${id}`).update({ doubleApproval: 1, status: 'pending_double_approval', adminReviewed: true })
+                        .then(() => showToast(`⚠️ اعتماد أول لـ: ${name} - بانتظار الاعتماد الثاني`, 'warning'));
+                } else {
+                    db.ref(`requests/needy/${id}`).update({ doubleApproval: 2, status: 'approved', adminReviewed: true })
+                        .then(() => showToast(`✅ تم الاعتماد المزدوج لـ: ${name}`, 'success'));
+                }
+            });
         } else {
-            update(ref(db, `requests/needy/${id}`), { status: 'approved' })
-            .then(() => alert(`✅ تم اعتماد طلب: ${name}`));
+            db.ref(`requests/needy/${id}`).update({ status: 'approved', adminReviewed: true })
+                .then(() => showToast(`✅ تم اعتماد طلب: ${name}`, 'success'));
         }
     };
 
     window.rejectRequest = function(name, id) {
         if (confirm(`هل أنت متأكد من رفض طلب: ${name}؟`)) {
-            update(ref(db, `requests/needy/${id}`), { status: 'rejected' })
-            .then(() => alert(`❌ تم رفض الطلب.`));
+            const reason = prompt('سبب الرفض (اختياري):');
+            db.ref(`requests/needy/${id}`).update({ status: 'rejected', rejectionReason: reason || 'غير محدد', adminReviewed: true })
+                .then(() => showToast(`❌ تم رفض طلب: ${name}`, 'warning'));
         }
     };
 
-    window.requestMoreInfo = function(name) {
-        alert(`📋 تم إرسال طلب معلومات إضافية لـ: ${name}`);
+    window.requestMoreInfo = function(name, id) {
+        const info = prompt(`ما المعلومات الإضافية المطلوبة من: ${name}؟`);
+        if (info) {
+            db.ref(`requests/needy/${id}`).update({ moreInfoRequested: info, adminReviewed: true })
+                .then(() => showToast(`📋 تم طلب معلومات إضافية من: ${name}`, 'info'));
+        }
     };
 
     window.filterRequests = function(filter, btn) {
@@ -323,5 +398,9 @@
         });
     }
 </script>
+
+<style>
+    @keyframes slideIn { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+</style>
 </body>
 </html>
