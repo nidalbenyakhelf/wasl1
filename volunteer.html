@@ -199,4 +199,38 @@
             
             const codeDisplay = `
                 <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px;">
-                    <div style="background: white
+                    <div style="background: white; border-radius: 20px; padding: 2.5rem; max-width: 450px; width: 100%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+                        <i class="fa-solid fa-id-card" style="font-size: 4rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                        <h2 style="color: var(--primary); margin-bottom: 1rem;">مرحباً بك في وصْل!</h2>
+                        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">تم إنشاء جواز التطوع الرقمي الخاص بك</p>
+                        <div style="background: #f0fdfa; border: 2px dashed var(--primary); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                            <div style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">كود المتطوع الخاص بك</div>
+                            <div style="font-size: 2.5rem; font-weight: 900; color: var(--primary); letter-spacing: 3px;">${trackingCode}</div>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <a href="track.html" style="flex: 1; padding: 12px; background: var(--primary); color: white; border-radius: 10px; text-decoration: none; font-weight: 700;">تتبع الطلب</a>
+                            <button onclick="this.parentElement.parentElement.parentElement.remove()" style="flex: 1; padding: 12px; background: var(--bg-alt); color: var(--text); border: 1px solid var(--border); border-radius: 10px; font-weight: 700; cursor: pointer; font-family: 'Cairo';">إغلاق</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', codeDisplay);
+            this.reset();
+        } catch (error) {
+            console.error("Error:", error);
+            showToast('حدث خطأ: ' + error.message, 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-hand-holding-heart"></i> تأكيد التطوع والحصول على الجواز';
+        }
+    });
+
+    const menuToggle = document.querySelector('.menu-toggle');
+    const mainNav = document.querySelector('.main-nav');
+    if (menuToggle && mainNav) {
+        menuToggle.addEventListener('click', () => { mainNav.style.display = mainNav.style.display === 'flex' ? 'none' : 'flex'; });
+    }
+</script>
+<style>@keyframes slideIn { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }</style>
+</body>
+</html>
