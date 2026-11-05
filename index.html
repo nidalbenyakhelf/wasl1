@@ -8,9 +8,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
 
+<!-- Header -->
 <header>
     <div class="container header-inner">
         <a href="index.html" class="logo">
@@ -21,6 +23,9 @@
             <a href="#about">من نحن</a>
             <a href="#how-it-works">كيف نعمل</a>
             <a href="#faq">الأسئلة الشائعة</a>
+            <a href="track.html" class="btn btn-outline">
+                <i class="fa-solid fa-magnifying-glass-location"></i> تتبع طلبك
+            </a>
             <a href="admin.html" class="btn btn-primary">لوحة التحكم</a>
         </nav>
         <button class="menu-toggle" aria-label="القائمة">
@@ -31,10 +36,12 @@
         <a href="#about">من نحن</a>
         <a href="#how-it-works">كيف نعمل</a>
         <a href="#faq">الأسئلة الشائعة</a>
-        <a href="admin.html">لوحة التحكم</a>
+        <a href="track.html"><i class="fa-solid fa-magnifying-glass-location"></i> تتبع طلبك</a>
+        <a href="admin.html"><i class="fa-solid fa-shield-halved"></i> لوحة التحكم</a>
     </div>
 </header>
 
+<!-- Hero Section -->
 <section class="hero">
     <div class="container hero-content">
         <div class="hero-text">
@@ -101,6 +108,7 @@
     </div>
 </section>
 
+<!-- About Section -->
 <section id="about" class="section">
     <div class="container">
         <div class="section-header">
@@ -115,6 +123,7 @@
     </div>
 </section>
 
+<!-- How It Works -->
 <section id="how-it-works" class="section section-alt">
     <div class="container">
         <div class="section-header">
@@ -125,28 +134,36 @@
         <div class="steps-grid">
             <div class="step-card" onclick="openModal('modal-1')">
                 <span class="step-number">01</span>
-                <div class="step-icon"><i class="fa-solid fa-file-signature"></i></div>
+                <div class="step-icon">
+                    <i class="fa-solid fa-file-signature"></i>
+                </div>
                 <h3>تسجيل الطلب</h3>
                 <p>المحتاج يسجّل طلبه، والجمعية تعلن عن فائض موارد أو حاجة لدعم.</p>
                 <span class="click-hint">اضغط للتفاصيل <i class="fa-solid fa-arrow-left"></i></span>
             </div>
             <div class="step-card" onclick="openModal('modal-2')">
                 <span class="step-number">02</span>
-                <div class="step-icon"><i class="fa-solid fa-location-crosshairs"></i></div>
+                <div class="step-icon">
+                    <i class="fa-solid fa-location-crosshairs"></i>
+                </div>
                 <h3>مطابقة ذكية</h3>
                 <p>النظام يحدد الموقع الجغرافي (Geo-Targeting) ودرجة الاستعجال لربط الطلب بالجهة الأنسب.</p>
                 <span class="click-hint">اضغط للتفاصيل <i class="fa-solid fa-arrow-left"></i></span>
             </div>
             <div class="step-card" onclick="openModal('modal-3')">
                 <span class="step-number">03</span>
-                <div class="step-icon"><i class="fa-solid fa-id-card"></i></div>
+                <div class="step-icon">
+                    <i class="fa-solid fa-id-card"></i>
+                </div>
                 <h3>جواز التطوع</h3>
                 <p>المتطوع يبادر بالمساعدة (Passport Volontariat)، ويتم توثيق مساهمته في سجله الرقمي.</p>
                 <span class="click-hint">اضغط للتفاصيل <i class="fa-solid fa-arrow-left"></i></span>
             </div>
             <div class="step-card" onclick="openModal('modal-4')">
                 <span class="step-number">04</span>
-                <div class="step-icon"><i class="fa-solid fa-chart-line"></i></div>
+                <div class="step-icon">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
                 <h3>تتبع الأثر</h3>
                 <p>متابعة لحظية وشفافة (Real-time Tracking) لرحلة التبرع من البداية حتى وصوله لمستحقه.</p>
                 <span class="click-hint">اضغط للتفاصيل <i class="fa-solid fa-arrow-left"></i></span>
@@ -155,6 +172,7 @@
     </div>
 </section>
 
+<!-- FAQ Section -->
 <section id="faq" class="section">
     <div class="container">
         <div class="section-header">
@@ -217,10 +235,20 @@
                     <p>نعم! المنصة تعمل كتطبيق PWA. يمكنك تثبيتها على هاتفك مباشرة من المتصفح، وتعمل حتى بدون إنترنت.</p>
                 </div>
             </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span><i class="fa-solid fa-barcode"></i> ما هو كود التتبع؟</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>بعد تسجيل أي طلب، ستحصل على كود فريد (مثل WSL-1234) يمكنك استخدامه في صفحة "تتبع طلبك" لمعرفة حالة طلبك في أي وقت.</p>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
+<!-- Footer -->
 <footer class="site-footer">
     <div class="container">
         <div class="footer-grid">
@@ -249,6 +277,7 @@
                     <li><a href="needy.html"><i class="fa-solid fa-chevron-left"></i> بوابة المحتاجين</a></li>
                     <li><a href="volunteer.html"><i class="fa-solid fa-chevron-left"></i> بوابة المتطوعين</a></li>
                     <li><a href="donor.html"><i class="fa-solid fa-chevron-left"></i> بوابة المتبرعين</a></li>
+                    <li><a href="track.html"><i class="fa-solid fa-chevron-left"></i> تتبع طلبك</a></li>
                     <li><a href="admin.html"><i class="fa-solid fa-chevron-left"></i> لوحة الإدارة</a></li>
                 </ul>
             </div>
@@ -271,7 +300,9 @@
 <div id="modal-1" class="modal">
     <div class="modal-content">
         <span class="close-modal" onclick="closeModal('modal-1')">&times;</span>
-        <div class="modal-icon"><i class="fa-solid fa-file-signature"></i></div>
+        <div class="modal-icon">
+            <i class="fa-solid fa-file-signature"></i>
+        </div>
         <h2>تسجيل الطلب</h2>
         <p>يقوم المحتاج بإنشاء حساب وتقديم طلب مساعدة بسرية تامة. في المقابل، تدخل الجمعيات مواردها الفائضة في النظام لتكون جاهزة للربط الفوري.</p>
     </div>
@@ -280,7 +311,9 @@
 <div id="modal-2" class="modal">
     <div class="modal-content">
         <span class="close-modal" onclick="closeModal('modal-2')">&times;</span>
-        <div class="modal-icon"><i class="fa-solid fa-location-crosshairs"></i></div>
+        <div class="modal-icon">
+            <i class="fa-solid fa-location-crosshairs"></i>
+        </div>
         <h2>المطابقة الذكية (Geo-Targeting)</h2>
         <ul class="modal-features">
             <li><i class="fa-solid fa-location-dot"></i><div><strong>الموقع الجغرافي:</strong> أقرب جمعية في منطقتك</div></li>
@@ -293,7 +326,9 @@
 <div id="modal-3" class="modal">
     <div class="modal-content">
         <span class="close-modal" onclick="closeModal('modal-3')">&times;</span>
-        <div class="modal-icon"><i class="fa-solid fa-id-card"></i></div>
+        <div class="modal-icon">
+            <i class="fa-solid fa-id-card"></i>
+        </div>
         <h2>جواز التطوع (Passport Volontariat)</h2>
         <p>سجل رقمي موثّق يسجل كل ساعات تطوعك، الجمعيات التي ساعدتها، والتقييمات. يمكنك مشاركته في سيرتك الذاتية أو للحصول على شهادات تقدير.</p>
     </div>
@@ -302,7 +337,9 @@
 <div id="modal-4" class="modal">
     <div class="modal-content">
         <span class="close-modal" onclick="closeModal('modal-4')">&times;</span>
-        <div class="modal-icon"><i class="fa-solid fa-chart-line"></i></div>
+        <div class="modal-icon">
+            <i class="fa-solid fa-chart-line"></i>
+        </div>
         <h2>تتبع الأثر (Real-time Tracking)</h2>
         <ul class="modal-features">
             <li><i class="fa-solid fa-eye"></i><div><strong>شفافية كاملة:</strong> كل تبرع موثق من البداية للنهاية</div></li>
