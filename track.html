@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0F5B4E">
     <title>تتبع طلبك - وصْل</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -12,42 +13,160 @@
         .page-header h1 { font-size: 2.5rem; color: var(--text); margin-bottom: 10px; }
         .page-header p { color: var(--text-muted); font-size: 1.1rem; }
         .track-container { max-width: 700px; margin: 0 auto; padding: 60px 20px; }
-        .search-box { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; box-shadow: var(--shadow); }
+        
+        .search-box {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
         .search-box h3 { color: var(--primary); margin-bottom: 1rem; font-size: 1.3rem; }
         .search-input-group { display: flex; gap: 10px; }
-        .search-input-group input { flex: 1; padding: 14px; border: 2px solid var(--border); border-radius: 10px; font-family: 'Cairo', sans-serif; font-size: 1.1rem; text-align: center; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; }
+        .search-input-group input {
+            flex: 1;
+            padding: 14px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1.1rem;
+            text-align: center;
+            letter-spacing: 2px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
         .search-input-group input:focus { outline: none; border-color: var(--primary); }
-        .search-btn { padding: 14px 30px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; font-family: 'Cairo', sans-serif; font-size: 1rem; transition: 0.3s; }
+        .search-btn {
+            padding: 14px 30px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
         .search-btn:hover { background: var(--primary-dark); }
-        .result-card { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; box-shadow: var(--shadow); }
-        .result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 1rem; }
-        .tracking-code { font-size: 1.5rem; font-weight: 900; color: var(--primary); letter-spacing: 2px; }
-        .status-badge { padding: 8px 20px; border-radius: 20px; font-weight: 700; font-size: 0.95rem; }
+        .search-btn:disabled { background: #9ca3af; cursor: not-allowed; }
+        
+        .result-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .tracking-code {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--primary);
+            letter-spacing: 2px;
+        }
+        .status-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
         .status-badge.pending { background: #fef3c7; color: #92400e; }
         .status-badge.reviewing { background: #dbeafe; color: #1e40af; }
         .status-badge.approved { background: #dcfce7; color: #166534; }
         .status-badge.rejected { background: #fee2e2; color: #991b1b; }
         .status-badge.matched { background: #f3e8ff; color: #6b21a8; }
+        
         .request-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
         .info-item { background: var(--bg-alt); padding: 1rem; border-radius: 10px; }
         .info-item strong { display: block; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.25rem; }
         .info-item span { color: var(--text); font-weight: 600; }
+        
         .timeline { margin-top: 2rem; }
         .timeline h4 { color: var(--primary); margin-bottom: 1rem; font-size: 1.2rem; }
-        .timeline-item { display: flex; gap: 1rem; padding: 1rem 0; border-right: 3px solid var(--border); padding-right: 1.5rem; margin-right: 1rem; position: relative; }
-        .timeline-item::before { content: ''; position: absolute; right: -9px; top: 1.2rem; width: 15px; height: 15px; background: var(--primary); border-radius: 50%; border: 3px solid var(--bg); }
+        .timeline-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-right: 3px solid var(--border);
+            padding-right: 1.5rem;
+            margin-right: 1rem;
+            position: relative;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            right: -9px;
+            top: 1.2rem;
+            width: 15px;
+            height: 15px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 3px solid var(--bg);
+        }
         .timeline-item.success::before { background: #22c55e; }
         .timeline-item.warning::before { background: #eab308; }
         .timeline-item.info::before { background: #3b82f6; }
         .timeline-content { flex: 1; }
         .timeline-content strong { display: block; color: var(--text); margin-bottom: 0.25rem; }
         .timeline-content small { color: var(--text-muted); font-size: 0.85rem; }
-        .empty-result { text-align: center; padding: 3rem; color: var(--text-muted); background: var(--bg); border: 1px dashed var(--border); border-radius: 16px; }
+        
+        .empty-result {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+            background: var(--bg);
+            border: 1px dashed var(--border);
+            border-radius: 16px;
+        }
         .empty-result i { font-size: 3rem; margin-bottom: 1rem; opacity: 0.3; }
-        .example-codes { background: var(--bg-alt); border: 1px solid var(--border); border-radius: 12px; padding: 1rem; margin-top: 1rem; }
+        
+        .example-codes {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
         .example-codes small { color: var(--text-muted); display: block; margin-bottom: 0.5rem; }
-        .example-codes code { background: white; padding: 4px 10px; border-radius: 6px; margin: 0 5px; font-weight: 700; color: var(--primary); cursor: pointer; }
-        @media (max-width: 768px) { .search-input-group { flex-direction: column; } }
+        .example-codes code {
+            background: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin: 0 5px;
+            font-weight: 700;
+            color: var(--primary);
+            cursor: pointer;
+        }
+        
+        .info-banner {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        .info-banner i { font-size: 1.5rem; color: var(--primary); }
+        .info-banner p { color: var(--text-muted); margin: 0; line-height: 1.7; }
+        
+        @media (max-width: 768px) {
+            .search-input-group { flex-direction: column; }
+            .result-header { flex-direction: column; align-items: flex-start; }
+        }
     </style>
 </head>
 <body>
@@ -64,21 +183,44 @@
         </nav>
         <button class="menu-toggle" aria-label="القائمة"><i class="fa-solid fa-bars"></i></button>
     </div>
+    <div class="mobile-menu">
+        <a href="index.html">الرئيسية</a>
+        <a href="needy.html">طلب مساعدة</a>
+        <a href="association.html">الجمعيات</a>
+        <a href="volunteer.html">المتطوعين</a>
+        <a href="donor.html">المتبرعين</a>
+    </div>
 </header>
 
 <section class="page-header">
     <div class="container">
         <h1><i class="fa-solid fa-magnifying-glass-location"></i> تتبع طلبك</h1>
-        <p>أدخل كود التتبع الذي حصلت عليه عند التسجيل</p>
+        <p>أدخل كود التتبع الذي حصلت عليه عند التسجيل لمعرفة حالة طلبك</p>
     </div>
 </section>
 
 <section class="track-container">
+    <div class="info-banner">
+        <i class="fa-solid fa-circle-info"></i>
+        <div>
+            <p><strong>كيف تستخدم كود التتبع؟</strong> عند تسجيل أي طلب (مساعدة، تطوع، تبرع، جمعية)، ستحصل على كود فريد بصيغة <strong>WSL-XXXX</strong>. استخدم هذا الكود هنا لمتابعة حالة طلبك في أي وقت.</p>
+        </div>
+    </div>
+
     <div class="search-box">
         <h3><i class="fa-solid fa-barcode"></i> أدخل كود التتبع</h3>
         <div class="search-input-group">
             <input type="text" id="trackingInput" placeholder="WSL-XXXX" maxlength="8">
-            <button class="search-btn" id="searchBtn"><i class="fa-solid fa-search"></i> بحث</button>
+            <button class="search-btn" id="searchBtn">
+                <i class="fa-solid fa-search"></i> بحث
+            </button>
+        </div>
+        <div class="example-codes">
+            <small>أمثلة على أكواد التتبع (انقر للنسخ):</small>
+            <div style="margin-top: 0.5rem;">
+                <code onclick="copyCode('WSL-1234')">WSL-1234</code>
+                <code onclick="copyCode('WSL-5678')">WSL-5678</code>
+            </div>
         </div>
     </div>
 
@@ -101,6 +243,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script>
+    // ===== تهيئة Firebase =====
     const firebaseConfig = {
         apiKey: "AIzaSyDWcHnd1gm2L8Fbq-GaoyVJJk3tySbzSvk",
         authDomain: "wasl-fba4b.firebaseapp.com",
@@ -114,26 +257,63 @@
     const db = firebase.database();
     
     console.log('✅ Firebase initializing...');
-    db.ref().once('value').then(() => console.log('✅ Firebase Connected!')).catch(e => console.error('❌ Firebase Error:', e));
+    db.ref().once('value')
+        .then(() => console.log('✅ Firebase Connected!'))
+        .catch(e => console.error('❌ Firebase Error:', e));
 
     document.getElementById('current-year').textContent = new Date().getFullYear();
 
+    // ===== نظام Toast Notifications =====
     function showToast(message, type = 'info') {
         const container = document.getElementById('toastContainer');
         const toast = document.createElement('div');
-        const icons = { success: 'fa-circle-check', error: 'fa-circle-xmark', info: 'fa-circle-info', warning: 'fa-triangle-exclamation' };
-        const colors = { success: '#22c55e', error: '#ef4444', info: '#3b82f6', warning: '#eab308' };
-        toast.style.cssText = `background: white; border-right: 4px solid ${colors[type]}; padding: 1rem 1.5rem; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 10px; min-width: 280px; animation: slideIn 0.3s ease; font-family: 'Cairo', sans-serif;`;
-        toast.innerHTML = `<i class="fa-solid ${icons[type]}" style="color: ${colors[type]}; font-size: 1.2rem;"></i><span style="flex: 1; font-weight: 600; color: #1f2937;">${message}</span>`;
+        const icons = {
+            success: 'fa-circle-check',
+            error: 'fa-circle-xmark',
+            info: 'fa-circle-info',
+            warning: 'fa-triangle-exclamation'
+        };
+        const colors = {
+            success: '#22c55e',
+            error: '#ef4444',
+            info: '#3b82f6',
+            warning: '#eab308'
+        };
+        toast.style.cssText = `
+            background: white;
+            border-right: 4px solid ${colors[type]};
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 280px;
+            animation: slideIn 0.3s ease;
+            font-family: 'Cairo', sans-serif;
+        `;
+        toast.innerHTML = `
+            <i class="fa-solid ${icons[type]}" style="color: ${colors[type]}; font-size: 1.2rem;"></i>
+            <span style="flex: 1; font-weight: 600; color: #1f2937;">${message}</span>
+        `;
         container.appendChild(toast);
-        setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateX(-100%)'; toast.style.transition = 'all 0.3s'; setTimeout(() => toast.remove(), 300); }, 4000);
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateX(-100%)';
+            toast.style.transition = 'all 0.3s';
+            setTimeout(() => toast.remove(), 300);
+        }, 4000);
     }
 
-    function copyCode(el) {
-        navigator.clipboard.writeText(el.textContent);
-        showToast('تم نسخ الكود: ' + el.textContent, 'success');
+    // ===== نسخ الكود =====
+    function copyCode(code) {
+        navigator.clipboard.writeText(code).then(() => {
+            document.getElementById('trackingInput').value = code;
+            showToast('تم نسخ الكود: ' + code, 'success');
+        });
     }
 
+    // ===== البحث عن الطلب =====
     document.getElementById('searchBtn').addEventListener('click', searchRequest);
     document.getElementById('trackingInput').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') searchRequest();
@@ -142,14 +322,17 @@
     async function searchRequest() {
         const code = document.getElementById('trackingInput').value.trim().toUpperCase();
         const resultContainer = document.getElementById('resultContainer');
+        const searchBtn = document.getElementById('searchBtn');
         
         if (!code || !code.startsWith('WSL-')) {
             showToast('الرجاء إدخال كود تتبع صحيح (يبدأ بـ WSL-)', 'warning');
             return;
         }
 
+        searchBtn.disabled = true;
+        searchBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري البحث...';
         showToast('جاري البحث عن طلبك...', 'info');
-        resultContainer.innerHTML = '<div class="empty-result"><i class="fa-solid fa-spinner fa-spin"></i><p>جاري البحث...</p></div>';
+        resultContainer.innerHTML = '<div class="empty-result"><i class="fa-solid fa-spinner fa-spin"></i><p>جاري البحث في قاعدة البيانات...</p></div>';
 
         try {
             const snapshot = await db.ref('requests').once('value');
@@ -172,27 +355,63 @@
 
             if (found) {
                 displayResult(found, requestType);
-                showToast('تم العثور على طلبك!', 'success');
+                showToast('✅ تم العثور على طلبك!', 'success');
             } else {
                 resultContainer.innerHTML = `
                     <div class="empty-result">
                         <i class="fa-solid fa-circle-xmark" style="color: #ef4444;"></i>
                         <p style="color: #ef4444; font-weight: 700;">لم يتم العثور على طلب بهذا الكود</p>
-                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">تأكد من كتابة الكود بشكل صحيح</p>
+                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">تأكد من كتابة الكود بشكل صحيح (مثال: WSL-1234)</p>
                     </div>
                 `;
                 showToast('لم يتم العثور على طلب بهذا الكود', 'error');
             }
         } catch (error) {
             console.error(error);
-            showToast('حدث خطأ في الاتصال', 'error');
+            resultContainer.innerHTML = `
+                <div class="empty-result">
+                    <i class="fa-solid fa-triangle-exclamation" style="color: #eab308;"></i>
+                    <p style="color: #eab308; font-weight: 700;">حدث خطأ في الاتصال</p>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">يرجى المحاولة لاحقاً</p>
+                </div>
+            `;
+            showToast('حدث خطأ في الاتصال: ' + error.message, 'error');
+        } finally {
+            searchBtn.disabled = false;
+            searchBtn.innerHTML = '<i class="fa-solid fa-search"></i> بحث';
         }
     }
 
     function displayResult(req, type) {
-        const typeLabels = { needy: 'طلب مساعدة', associations: 'طلب جمعية', volunteers: 'تطوع', donors: 'تبرع' };
-        const statusLabels = { pending_review: 'قيد المراجعة', reviewing: 'قيد المراجعة', pending_double_approval: 'بانتظار اعتماد مزدوج', approved: 'معتمد', rejected: 'مرفوض', matched: 'تمت المطابقة', active: 'نشط', received: 'تم الاستلام' };
-        const statusClass = { pending_review: 'pending', reviewing: 'reviewing', pending_double_approval: 'reviewing', approved: 'approved', rejected: 'rejected', matched: 'matched', active: 'approved', received: 'pending' };
+        const typeLabels = {
+            needy: 'طلب مساعدة',
+            associations: 'طلب جمعية',
+            volunteers: 'تطوع',
+            donors: 'تبرع'
+        };
+        
+        const statusLabels = {
+            pending_review: 'قيد المراجعة',
+            reviewing: 'قيد المراجعة',
+            pending_double_approval: 'بانتظار اعتماد مزدوج',
+            approved: 'معتمد',
+            rejected: 'مرفوض',
+            matched: 'تمت المطابقة',
+            active: 'نشط',
+            received: 'تم الاستلام'
+        };
+
+        const statusClass = {
+            pending_review: 'pending',
+            reviewing: 'reviewing',
+            pending_double_approval: 'reviewing',
+            approved: 'approved',
+            rejected: 'rejected',
+            matched: 'matched',
+            active: 'approved',
+            received: 'pending'
+        };
+
         const dateStr = req.timestamp ? new Date(req.timestamp).toLocaleString('ar-DZ') : 'غير محدد';
         
         let html = `
@@ -202,11 +421,20 @@
                         <div style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.25rem;">كود التتبع</div>
                         <div class="tracking-code">${req.trackingCode}</div>
                     </div>
-                    <span class="status-badge ${statusClass[req.status] || 'pending'}">${statusLabels[req.status] || 'غير محدد'}</span>
+                    <span class="status-badge ${statusClass[req.status] || 'pending'}">
+                        ${statusLabels[req.status] || 'غير محدد'}
+                    </span>
                 </div>
+                
                 <div class="request-info">
-                    <div class="info-item"><strong>نوع الطلب</strong><span>${typeLabels[type] || type}</span></div>
-                    <div class="info-item"><strong>تاريخ التسجيل</strong><span>${dateStr}</span></div>
+                    <div class="info-item">
+                        <strong>نوع الطلب</strong>
+                        <span>${typeLabels[type] || type}</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>تاريخ التسجيل</strong>
+                        <span>${dateStr}</span>
+                    </div>
                     ${req.state ? `<div class="info-item"><strong>الولاية</strong><span>${req.state}</span></div>` : ''}
                     ${req.city ? `<div class="info-item"><strong>البلدية</strong><span>${req.city}</span></div>` : ''}
                     ${req.name || req.fullName ? `<div class="info-item"><strong>الاسم</strong><span>${req.name || req.fullName}</span></div>` : ''}
@@ -214,52 +442,140 @@
         `;
 
         if (req.status === 'matched' && req.matchedWith) {
-            html += `<div style="background: #f3e8ff; border: 1px solid #a855f7; border-radius: 12px; padding: 1rem; margin-top: 1rem;"><strong style="color: #6b21a8;"><i class="fa-solid fa-link"></i> تمت المطابقة بنجاح!</strong><p style="margin: 0.5rem 0 0; color: #6b21a8;">تم ربط طلبك بـ: ${req.matchedWith}</p></div>`;
+            html += `
+                <div style="background: #f3e8ff; border: 1px solid #a855f7; border-radius: 12px; padding: 1rem; margin-top: 1rem;">
+                    <strong style="color: #6b21a8;"><i class="fa-solid fa-link"></i> تمت المطابقة بنجاح!</strong>
+                    <p style="margin: 0.5rem 0 0; color: #6b21a8;">تم ربط طلبك بـ: ${req.matchedWith}</p>
+                </div>
+            `;
         }
 
         if (req.status === 'approved') {
-            html += `<div style="background: #dcfce7; border: 1px solid #22c55e; border-radius: 12px; padding: 1rem; margin-top: 1rem;"><strong style="color: #166534;"><i class="fa-solid fa-circle-check"></i> تم اعتماد طلبك!</strong><p style="margin: 0.5rem 0 0; color: #166534;">سيتم التواصل معك قريباً.</p></div>`;
+            html += `
+                <div style="background: #dcfce7; border: 1px solid #22c55e; border-radius: 12px; padding: 1rem; margin-top: 1rem;">
+                    <strong style="color: #166534;"><i class="fa-solid fa-circle-check"></i> تم اعتماد طلبك!</strong>
+                    <p style="margin: 0.5rem 0 0; color: #166534;">سيتم التواصل معك قريباً عبر ${req.phone || 'البيانات المسجلة'}.</p>
+                </div>
+            `;
         }
 
         if (req.status === 'rejected') {
-            html += `<div style="background: #fee2e2; border: 1px solid #ef4444; border-radius: 12px; padding: 1rem; margin-top: 1rem;"><strong style="color: #991b1b;"><i class="fa-solid fa-circle-xmark"></i> تم رفض الطلب</strong>${req.rejectionReason ? `<p style="margin: 0.5rem 0 0; color: #991b1b;">السبب: ${req.rejectionReason}</p>` : ''}</div>`;
+            html += `
+                <div style="background: #fee2e2; border: 1px solid #ef4444; border-radius: 12px; padding: 1rem; margin-top: 1rem;">
+                    <strong style="color: #991b1b;"><i class="fa-solid fa-circle-xmark"></i> تم رفض الطلب</strong>
+                    ${req.rejectionReason ? `<p style="margin: 0.5rem 0 0; color: #991b1b;">السبب: ${req.rejectionReason}</p>` : ''}
+                </div>
+            `;
+        }
+
+        if (req.status === 'pending_review' || req.status === 'received') {
+            html += `
+                <div style="background: #fef3c7; border: 1px solid #eab308; border-radius: 12px; padding: 1rem; margin-top: 1rem;">
+                    <strong style="color: #92400e;"><i class="fa-solid fa-clock"></i> طلبك قيد المراجعة</strong>
+                    <p style="margin: 0.5rem 0 0; color: #92400e;">سيقوم فريق الإدارة بتقييم طلبك خلال 24-48 ساعة.</p>
+                </div>
+            `;
         }
 
         html += `</div>`;
 
-        html += `<div class="result-card"><div class="timeline"><h4><i class="fa-solid fa-clock-rotate-left"></i> سجل التحديثات</h4><div class="timeline-item success"><div class="timeline-content"><strong>تم تسجيل الطلب</strong><small>${dateStr}</small></div></div>`;
+        // Timeline
+        html += `
+            <div class="result-card">
+                <div class="timeline">
+                    <h4><i class="fa-solid fa-clock-rotate-left"></i> سجل التحديثات</h4>
+                    <div class="timeline-item success">
+                        <div class="timeline-content">
+                            <strong>تم تسجيل الطلب</strong>
+                            <small>${dateStr}</small>
+                        </div>
+                    </div>
+        `;
 
         if (req.status !== 'pending_review' && req.status !== 'received') {
-            html += `<div class="timeline-item info"><div class="timeline-content"><strong>بدأت المراجعة من الإدارة</strong><small>تم استلام الطلب ومراجعته</small></div></div>`;
+            html += `
+                    <div class="timeline-item info">
+                        <div class="timeline-content">
+                            <strong>بدأت المراجعة من الإدارة</strong>
+                            <small>تم استلام الطلب ومراجعته</small>
+                        </div>
+                    </div>
+            `;
         }
 
         if (req.status === 'approved' || req.status === 'matched') {
-            html += `<div class="timeline-item success"><div class="timeline-content"><strong>تم اعتماد الطلب</strong><small>تمت الموافقة على طلبك</small></div></div>`;
+            html += `
+                    <div class="timeline-item success">
+                        <div class="timeline-content">
+                            <strong>تم اعتماد الطلب</strong>
+                            <small>تمت الموافقة على طلبك</small>
+                        </div>
+                    </div>
+            `;
         }
 
         if (req.status === 'matched') {
-            html += `<div class="timeline-item success"><div class="timeline-content"><strong>تمت المطابقة بنجاح</strong><small>تم ربط طلبك بالجهة المناسبة</small></div></div>`;
+            html += `
+                    <div class="timeline-item success">
+                        <div class="timeline-content">
+                            <strong>تمت المطابقة بنجاح</strong>
+                            <small>تم ربط طلبك بالجهة المناسبة</small>
+                        </div>
+                    </div>
+            `;
         }
 
         if (req.status === 'rejected') {
-            html += `<div class="timeline-item warning"><div class="timeline-content"><strong>تم رفض الطلب</strong><small>${req.rejectionReason || 'لا يوجد سبب محدد'}</small></div></div>`;
+            html += `
+                    <div class="timeline-item warning">
+                        <div class="timeline-content">
+                            <strong>تم رفض الطلب</strong>
+                            <small>${req.rejectionReason || 'لا يوجد سبب محدد'}</small>
+                        </div>
+                    </div>
+            `;
         }
 
         html += `</div></div>`;
+
         document.getElementById('resultContainer').innerHTML = html;
     }
 
+    // قائمة متحركة
     const menuToggle = document.querySelector('.menu-toggle');
     const mainNav = document.querySelector('.main-nav');
-    if (menuToggle && mainNav) {
+    const mobileMenu = document.querySelector('.mobile-menu');
+    if (menuToggle) {
         menuToggle.addEventListener('click', () => {
-            mainNav.style.display = mainNav.style.display === 'flex' ? 'none' : 'flex';
+            if (mobileMenu) {
+                mobileMenu.style.display = mobileMenu.style.display === 'flex' ? 'none' : 'flex';
+            }
         });
     }
 </script>
 
 <style>
-    @keyframes slideIn { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes slideIn {
+        from { transform: translateX(-100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    .mobile-menu {
+        display: none;
+        flex-direction: column;
+        padding: 1rem;
+        background: var(--bg);
+        border-top: 1px solid var(--border);
+    }
+    .mobile-menu a {
+        padding: 1rem;
+        border-bottom: 1px solid var(--border);
+        color: var(--text);
+        text-decoration: none;
+        font-weight: 600;
+    }
+    @media (max-width: 768px) {
+        .main-nav { display: none; }
+    }
 </style>
 </body>
 </html>
